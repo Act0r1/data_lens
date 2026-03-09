@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Концепт 1: Noir Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --fg: #e8e4df;
+  --accent: #c9ff36;
+  --muted: #5a5650;
+  --surface: #151413;
+  --border: #2a2826;
+  --red: #ff4d4d;
+  --blue: #4d9fff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+}
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem 3rem;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.logo span { color: var(--accent); }
+
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: 0.75rem; text-transform: uppercase;
+  letter-spacing: 0.15em; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--fg); }
+
+.nav-cta {
+  background: var(--accent); color: var(--bg);
+  padding: 0.6rem 1.5rem; border: none; cursor: pointer;
+  font-family: inherit; font-size: 0.7rem;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  transition: transform 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); }
+
+/* ===== PAGE SECTIONS ===== */
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
+
+/* ===== LANDING ===== */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 5rem;
+}
+
+.hero-left {
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 4rem 3rem 4rem 5rem;
+}
+
+.hero-tag {
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 0.3em; color: var(--accent);
+  margin-bottom: 2rem;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 4.5rem; font-weight: 900;
+  line-height: 1.05; margin-bottom: 2rem;
+  letter-spacing: -0.03em;
+}
+
+.hero-title em {
+  font-style: italic; color: var(--accent);
+}
+
+.hero-desc {
+  font-size: 0.85rem; color: var(--muted);
+  line-height: 1.8; max-width: 420px;
+  margin-bottom: 3rem;
+}
+
+.hero-actions { display: flex; gap: 1rem; align-items: center; }
+
+.btn-primary {
+  background: var(--accent); color: var(--bg);
+  padding: 1rem 2.5rem; border: none; cursor: pointer;
+  font-family: inherit; font-size: 0.75rem;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  position: relative; overflow: hidden;
+  transition: transform 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); }
+
+.btn-ghost {
+  background: none; color: var(--fg);
+  padding: 1rem 2rem; border: 1px solid var(--border);
+  cursor: pointer; font-family: inherit; font-size: 0.75rem;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  transition: border-color 0.3s;
+}
+.btn-ghost:hover { border-color: var(--accent); }
+
+.hero-right {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+.hero-visual {
+  width: 85%; height: 70%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  position: relative;
+}
+
+.hero-visual::before {
+  content: '';
+  position: absolute; top: -30%; right: -20%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(201,255,54,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.mock-chart {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+.mock-chart-header {
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+.mock-chart-title {
+  font-size: 0.7rem; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--muted);
+}
+
+.mock-chart-badge {
+  font-size: 0.6rem; color: var(--accent);
+  border: 1px solid rgba(201,255,54,0.3);
+  padding: 0.2rem 0.6rem;
+}
+
+.mock-bars {
+  flex: 1; display: flex; align-items: flex-end;
+  gap: 6px; padding-top: 1rem;
+}
+
+.mock-bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--accent), rgba(201,255,54,0.3));
+  border-radius: 2px 2px 0 0;
+  animation: barGrow 1.5s ease-out forwards;
+  transform-origin: bottom;
+  opacity: 0;
+}
+
+@keyframes barGrow {
+  from { transform: scaleY(0); opacity: 0; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+.mock-bar:nth-child(1) { height: 45%; animation-delay: 0.1s; }
+.mock-bar:nth-child(2) { height: 72%; animation-delay: 0.15s; }
+.mock-bar:nth-child(3) { height: 38%; animation-delay: 0.2s; }
+.mock-bar:nth-child(4) { height: 85%; animation-delay: 0.25s; }
+.mock-bar:nth-child(5) { height: 60%; animation-delay: 0.3s; }
+.mock-bar:nth-child(6) { height: 92%; animation-delay: 0.35s; }
+.mock-bar:nth-child(7) { height: 55%; animation-delay: 0.4s; }
+.mock-bar:nth-child(8) { height: 78%; animation-delay: 0.45s; }
+.mock-bar:nth-child(9) { height: 40%; animation-delay: 0.5s; }
+.mock-bar:nth-child(10) { height: 68%; animation-delay: 0.55s; }
+.mock-bar:nth-child(11) { height: 50%; animation-delay: 0.6s; }
+.mock-bar:nth-child(12) { height: 82%; animation-delay: 0.65s; }
+
+.mock-insight-row {
+  display: flex; gap: 0.5rem; align-items: center;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.7rem;
+}
+
+.insight-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+}
+
+.insight-dot.warn { background: var(--red); }
+
+.insight-text { color: var(--muted); }
+.insight-val { margin-left: auto; color: var(--fg); font-weight: 500; }
+
+/* ===== FEATURES ===== */
+.features {
+  padding: 8rem 5rem;
+  border-top: 1px solid var(--border);
+}
+
+.section-label {
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 0.3em; color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem; font-weight: 700;
+  margin-bottom: 4rem; max-width: 600px;
+  line-height: 1.15;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+  transition: border-color 0.3s, transform 0.3s;
+  cursor: default;
+}
+.feature-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+
+.feature-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem; font-weight: 900;
+  color: var(--border); margin-bottom: 1.5rem;
+}
+
+.feature-card:hover .feature-num { color: var(--accent); }
+
+.feature-name {
+  font-size: 0.9rem; font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.feature-desc {
+  font-size: 0.75rem; color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ===== PRICING ===== */
+.pricing {
+  padding: 8rem 5rem;
+  border-top: 1px solid var(--border);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+
+.plan-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.plan-card.featured {
+  border-color: var(--accent);
+}
+
+.plan-card.featured::after {
+  content: 'Популярный';
+  position: absolute; top: -1px; right: 2rem;
+  background: var(--accent); color: var(--bg);
+  font-size: 0.6rem; text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.8rem;
+}
+
+.plan-name {
+  font-size: 0.7rem; text-transform: uppercase;
+  letter-spacing: 0.2em; color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.plan-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem; font-weight: 900;
+  margin-bottom: 0.25rem;
+}
+
+.plan-price-sub {
+  font-size: 0.7rem; color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+.plan-features {
+  list-style: none; margin-bottom: 2rem;
+}
+
+.plan-features li {
+  font-size: 0.75rem; color: var(--muted);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.plan-features li::before {
+  content: '→ ';
+  color: var(--accent);
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  padding-top: 4.5rem;
+}
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 2rem 0;
+}
+
+.sidebar-section {
+  padding: 0 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar-label {
+  font-size: 0.6rem; text-transform: uppercase;
+  letter-spacing: 0.2em; color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.6rem 1.5rem; cursor: pointer;
+  font-size: 0.8rem; color: var(--muted);
+  transition: all 0.2s;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-item:hover { color: var(--fg); background: rgba(255,255,255,0.02); }
+.sidebar-item.active {
+  color: var(--fg);
+  border-left-color: var(--accent);
+  background: rgba(201,255,54,0.03);
+}
+
+.sidebar-icon {
+  width: 16px; height: 16px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+}
+
+.main-content {
+  padding: 2rem 3rem;
+  overflow-y: auto;
+}
+
+.content-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 2.5rem;
+}
+
+.content-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; font-weight: 700;
+}
+
+.content-subtitle {
+  font-size: 0.75rem; color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+/* ===== UPLOAD ZONE ===== */
+.upload-zone {
+  border: 2px dashed var(--border);
+  padding: 3rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-zone:hover {
+  border-color: var(--accent);
+  background: rgba(201,255,54,0.02);
+}
+
+.upload-zone::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 10px,
+    rgba(201,255,54,0.01) 10px, rgba(201,255,54,0.01) 20px
+  );
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.upload-zone:hover::before { opacity: 1; }
+
+.upload-icon {
+  font-size: 2rem; margin-bottom: 1rem;
+  color: var(--muted);
+}
+
+.upload-text {
+  font-size: 0.85rem; margin-bottom: 0.5rem;
+}
+
+.upload-hint {
+  font-size: 0.7rem; color: var(--muted);
+}
+
+/* ===== FILE LIST ===== */
+.file-list { display: flex; flex-direction: column; gap: 2px; }
+
+.file-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 100px 100px 40px;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  transition: border-color 0.2s;
+}
+
+.file-row:hover { border-color: var(--accent); }
+.file-row-header { color: var(--muted); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; }
+.file-row-header:hover { border-color: var(--border); }
+
+.file-name { font-weight: 500; }
+
+.file-status {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+}
+
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+
+.status-dot.ready { background: var(--accent); }
+.status-dot.processing { background: var(--blue); animation: pulse 1.5s infinite; }
+.status-dot.error { background: var(--red); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.file-action {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted); width: 28px; height: 28px;
+  cursor: pointer; font-size: 0.7rem;
+  transition: all 0.2s;
+}
+
+.file-action:hover { border-color: var(--red); color: var(--red); }
+
+/* ===== ANALYSIS PAGE ===== */
+.analysis-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 2rem;
+  padding-top: 4.5rem;
+  min-height: 100vh;
+}
+
+.analysis-main { padding: 2rem 3rem; }
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  margin-bottom: 2.5rem;
+}
+
+.insight-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  transition: border-color 0.3s;
+}
+
+.insight-card:hover { border-color: var(--accent); }
+
+.insight-card-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 0.75rem;
+}
+
+.insight-type {
+  font-size: 0.6rem; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--accent);
+}
+
+.insight-severity {
+  font-size: 0.55rem; text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid;
+}
+
+.insight-severity.warning { color: var(--red); border-color: var(--red); }
+.insight-severity.info { color: var(--blue); border-color: var(--blue); }
+
+.insight-title {
+  font-size: 0.85rem; font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.insight-desc {
+  font-size: 0.75rem; color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ===== CHARTS ===== */
+.chart-section { margin-bottom: 2.5rem; }
+
+.chart-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  min-height: 300px;
+  position: relative;
+}
+
+.chart-title {
+  font-size: 0.7rem; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.mock-line-chart {
+  width: 100%; height: 200px;
+  position: relative;
+}
+
+.mock-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s ease forwards;
+}
+
+.mock-line-area {
+  fill: url(#accentGrad);
+  opacity: 0;
+  animation: fadeIn 1s ease 1.5s forwards;
+}
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* ===== CHAT PANEL ===== */
+.chat-panel {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding-top: 4.5rem;
+}
+
+.chat-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.7rem; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--muted);
+}
+
+.chat-messages {
+  flex: 1; padding: 1.5rem;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+.chat-msg {
+  max-width: 90%;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.chat-msg.user {
+  background: rgba(201,255,54,0.08);
+  border: 1px solid rgba(201,255,54,0.15);
+  align-self: flex-end;
+  color: var(--fg);
+}
+
+.chat-msg.assistant {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  align-self: flex-start;
+  color: var(--muted);
+}
+
+.chat-input-area {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 0.5rem;
+}
+
+.chat-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.chat-input:focus { border-color: var(--accent); }
+
+.chat-send {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 0 1.2rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ===== PAGE SWITCHER ===== */
+.page-switcher {
+  position: fixed; bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 4px;
+  z-index: 200;
+}
+
+.page-switcher button {
+  background: none; border: none;
+  color: var(--muted); padding: 0.5rem 1rem;
+  cursor: pointer; font-family: inherit;
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+}
+
+.page-switcher button.active {
+  background: var(--accent); color: var(--bg);
+}
+
+.page-switcher button:hover:not(.active) {
+  color: var(--fg);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Data<span>Lens</span></div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('landing')">Главная</a>
+    <a href="#" onclick="showPage('dashboard')">Дашборд</a>
+    <a href="#" onclick="showPage('analysis')">Анализ</a>
+  </div>
+  <button class="nav-cta">Попробовать бесплатно</button>
+</nav>
+
+<!-- ===== LANDING ===== -->
+<div id="landing" class="page active">
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">AI-аналитик для бизнеса</div>
+      <h1 class="hero-title">
+        Ваши данные.<br>
+        <em>Наши инсайты.</em>
+      </h1>
+      <p class="hero-desc">
+        Загрузите CSV или Excel — получите автоматический анализ с бизнес-рекомендациями, интерактивными графиками и AI-чатом. Для WB, Ozon, 1С.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('dashboard')">Начать анализ</button>
+        <button class="btn-ghost">Посмотреть демо</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-visual">
+        <div class="mock-chart">
+          <div class="mock-chart-header">
+            <span class="mock-chart-title">Выручка по месяцам</span>
+            <span class="mock-chart-badge">+23.4%</span>
+          </div>
+          <div class="mock-bars">
+            <div class="mock-bar"></div><div class="mock-bar"></div><div class="mock-bar"></div>
+            <div class="mock-bar"></div><div class="mock-bar"></div><div class="mock-bar"></div>
+            <div class="mock-bar"></div><div class="mock-bar"></div><div class="mock-bar"></div>
+            <div class="mock-bar"></div><div class="mock-bar"></div><div class="mock-bar"></div>
+          </div>
+          <div class="mock-insight-row">
+            <span class="insight-dot"></span>
+            <span class="insight-text">Тренд: рост выручки</span>
+            <span class="insight-val">R² = 0.87</span>
+          </div>
+          <div class="mock-insight-row">
+            <span class="insight-dot warn"></span>
+            <span class="insight-text">3 аномалии в возвратах</span>
+            <span class="insight-val">Z > 3.0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="section-label">Возможности</div>
+    <h2 class="section-title">Всё, что нужно для анализа данных</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-num">01</div>
+        <div class="feature-name">Автоматический парсинг</div>
+        <div class="feature-desc">CSV, Excel, любая кодировка. cp1251, UTF-8 — определяем автоматически.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02</div>
+        <div class="feature-name">Доменные знания</div>
+        <div class="feature-desc">Распознаём выгрузки WB, Ozon, 1С и рекламных кабинетов. Релевантные инсайты.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03</div>
+        <div class="feature-name">AI-инсайты</div>
+        <div class="feature-desc">Аномалии, тренды, выбросы, корреляции. Статистика + нейросеть = бизнес-рекомендации.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04</div>
+        <div class="feature-name">Интерактивные графики</div>
+        <div class="feature-desc">Автоматическая визуализация данных. Hover, zoom, экспорт.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">05</div>
+        <div class="feature-name">AI-чат</div>
+        <div class="feature-desc">Задавайте вопросы по данным на русском. Стриминговые ответы с графиками.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">06</div>
+        <div class="feature-name">Безопасность</div>
+        <div class="feature-desc">Данные в S3, шифрование, GDPR. Ваши данные — только ваши.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing">
+    <div class="section-label">Тарифы</div>
+    <h2 class="section-title">Простое ценообразование</h2>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">0 ₽</div>
+        <div class="plan-price-sub">навсегда</div>
+        <ul class="plan-features">
+          <li>5 файлов/мес</li>
+          <li>5 MB макс.</li>
+          <li>10 сообщений/день</li>
+          <li>3 анализа/мес</li>
+        </ul>
+        <button class="btn-ghost" style="width:100%">Начать</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">990 ₽</div>
+        <div class="plan-price-sub">в месяц</div>
+        <ul class="plan-features">
+          <li>30 файлов/мес</li>
+          <li>20 MB макс.</li>
+          <li>50 сообщений/день</li>
+          <li>15 анализов/мес</li>
+        </ul>
+        <button class="btn-ghost" style="width:100%">Выбрать</button>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-name">Business</div>
+        <div class="plan-price">3 990 ₽</div>
+        <div class="plan-price-sub">в месяц</div>
+        <ul class="plan-features">
+          <li>∞ файлов</li>
+          <li>50 MB макс.</li>
+          <li>∞ сообщений</li>
+          <li>∞ анализов</li>
+        </ul>
+        <button class="btn-primary" style="width:100%">Выбрать</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">9 990 ₽</div>
+        <div class="plan-price-sub">в месяц</div>
+        <ul class="plan-features">
+          <li>∞ файлов</li>
+          <li>100 MB макс.</li>
+          <li>∞ + API доступ</li>
+          <li>∞ анализов</li>
+        </ul>
+        <button class="btn-ghost" style="width:100%">Выбрать</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard" class="page">
+  <div class="dashboard">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Навигация</div>
+      </div>
+      <div class="sidebar-item active">
+        <div class="sidebar-icon">◫</div> Файлы
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon">◈</div> Анализы
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon">▤</div> Тарифы
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon">⚙</div> Настройки
+      </div>
+    </aside>
+    <main class="main-content">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Мои файлы</div>
+          <div class="content-subtitle">Загрузите файл для анализа</div>
+        </div>
+        <button class="btn-primary">Загрузить файл</button>
+      </div>
+
+      <div class="upload-zone">
+        <div class="upload-icon">⬆</div>
+        <div class="upload-text">Перетащите файл сюда или нажмите для выбора</div>
+        <div class="upload-hint">CSV, TSV, Excel (.xlsx) — до 50 MB</div>
+      </div>
+
+      <div class="file-list">
+        <div class="file-row file-row-header">
+          <span>Файл</span>
+          <span>Размер</span>
+          <span>Статус</span>
+          <span>Дата</span>
+          <span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">wb_sales_jan_2025.xlsx</span>
+          <span>2.4 MB</span>
+          <span class="file-status"><span class="status-dot ready"></span> Готов</span>
+          <span>12.01.25</span>
+          <button class="file-action">×</button>
+        </div>
+        <div class="file-row">
+          <span class="file-name">ozon_returns.csv</span>
+          <span>890 KB</span>
+          <span class="file-status"><span class="status-dot processing"></span> Обработка</span>
+          <span>12.01.25</span>
+          <button class="file-action">×</button>
+        </div>
+        <div class="file-row">
+          <span class="file-name">1c_report_q4.xlsx</span>
+          <span>5.1 MB</span>
+          <span class="file-status"><span class="status-dot ready"></span> Готов</span>
+          <span>10.01.25</span>
+          <button class="file-action">×</button>
+        </div>
+        <div class="file-row">
+          <span class="file-name">ads_campaign_dec.csv</span>
+          <span>340 KB</span>
+          <span class="file-status"><span class="status-dot error"></span> Ошибка</span>
+          <span>08.01.25</span>
+          <button class="file-action">×</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== ANALYSIS ===== -->
+<div id="analysis" class="page">
+  <div class="analysis-layout">
+    <div class="analysis-main">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Анализ: wb_sales_jan_2025.xlsx</div>
+          <div class="content-subtitle">Домен: Wildberries · 12 450 строк · 18 колонок</div>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn-ghost">Экспорт</button>
+          <button class="btn-primary">Новый анализ</button>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-bottom:1rem">Инсайты</div>
+      <div class="insights-grid">
+        <div class="insight-card">
+          <div class="insight-card-header">
+            <span class="insight-type">Тренд</span>
+            <span class="insight-severity info">info</span>
+          </div>
+          <div class="insight-title">Рост выручки на 23% за квартал</div>
+          <div class="insight-desc">Линейная регрессия показывает устойчивый тренд роста. R² = 0.87, наклон = 12 400₽/день.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-card-header">
+            <span class="insight-type">Аномалия</span>
+            <span class="insight-severity warning">warning</span>
+          </div>
+          <div class="insight-title">Резкий рост возвратов 15-17 января</div>
+          <div class="insight-desc">Z-score = 4.2. Возвраты в 3x выше среднего. Возможен брак или проблема с доставкой.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-card-header">
+            <span class="insight-type">Корреляция</span>
+            <span class="insight-severity info">info</span>
+          </div>
+          <div class="insight-title">Скидка ↔ Объём продаж</div>
+          <div class="insight-desc">Коэффициент Пирсона: 0.82. Чем выше скидка, тем больше продаж, но маржинальность падает.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-card-header">
+            <span class="insight-type">Бизнес</span>
+            <span class="insight-severity warning">warning</span>
+          </div>
+          <div class="insight-title">5 SKU генерируют 60% убытков</div>
+          <div class="insight-desc">Артикулы WB-4521, WB-4533, WB-4590, WB-4601, WB-4612 убыточны из-за логистики.</div>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <div class="section-label" style="margin-bottom:1rem">Визуализации</div>
+        <div class="chart-container">
+          <div class="chart-title">Выручка и возвраты по дням</div>
+          <svg class="mock-line-chart" viewBox="0 0 600 200">
+            <defs>
+              <linearGradient id="accentGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(201,255,54,0.3)" />
+                <stop offset="100%" stop-color="rgba(201,255,54,0)" />
+              </linearGradient>
+            </defs>
+            <path class="mock-line-area" d="M0,180 L50,140 100,150 150,110 200,120 250,80 300,90 350,60 400,70 450,40 500,50 550,30 600,20 600,200 0,200 Z" />
+            <path class="mock-line" d="M0,180 L50,140 100,150 150,110 200,120 250,80 300,90 350,60 400,70 450,40 500,50 550,30 600,20" />
+            <path style="fill:none; stroke:var(--red); stroke-width:1.5; opacity:0.6; stroke-dasharray:4" d="M0,185 L50,180 100,178 150,190 200,182 250,175 300,160 350,185 400,178 450,172 500,175 550,180 600,177" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-panel">
+      <div class="chat-header">AI-чат по данным</div>
+      <div class="chat-messages">
+        <div class="chat-msg user">Какие товары самые убыточные?</div>
+        <div class="chat-msg assistant">По данным анализа, 5 артикулов генерируют наибольшие убытки:
+
+1. WB-4521 (куртка зимняя) — убыток 45 200₽, возврат 38%
+2. WB-4533 (обувь) — убыток 32 100₽, логистика превышает маржу
+3. WB-4590 (аксессуары) — убыток 28 700₽, высокий % брака
+
+Рекомендация: вывести из ассортимента или пересмотреть ценообразование.</div>
+        <div class="chat-msg user">Покажи график возвратов по категориям</div>
+        <div class="chat-msg assistant">Вот распределение возвратов по категориям товаров. Одежда лидирует — 42% всех возвратов, что выше среднего по маркетплейсу.</div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" placeholder="Задайте вопрос по данным..." />
+        <button class="chat-send">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-switcher">
+  <button class="active" onclick="showPage('landing')">Лендинг</button>
+  <button onclick="showPage('dashboard')">Дашборд</button>
+  <button onclick="showPage('analysis')">Анализ</button>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.page-switcher button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

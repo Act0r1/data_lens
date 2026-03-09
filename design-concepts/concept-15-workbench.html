@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Концепт 15: Pro Workbench</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #1e1e1e;
+  --surface-dark: #252526;
+  --surface-light: #2d2d2d;
+  --border: #3e3e42;
+  --text: #cccccc;
+  --text-bright: #ffffff;
+  --accent: #007acc; /* VS Code Blue */
+  --highlight: #dcdcaa; /* VS Code Yellow */
+  --error: #f14c4c;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 0.85rem;
+}
+
+/* Top Menu Bar */
+.menu-bar {
+  height: 30px;
+  background: #333333;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 15px;
+  font-size: 0.8rem;
+}
+
+.menu-item { cursor: pointer; padding: 2px 6px; border-radius: 3px; }
+.menu-item:hover { background: #505050; color: var(--text-bright); }
+
+/* Main Layout */
+.workbench {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Activity Bar (Left thin strip) */
+.activity-bar {
+  width: 48px;
+  background: #333333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  border-right: 1px solid var(--border);
+}
+
+.activity-icon {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #858585;
+  font-size: 1.2rem;
+  border-left: 2px solid transparent;
+}
+.activity-icon.active { color: var(--text-bright); border-left-color: var(--accent); }
+
+/* Sidebar (Files) */
+.sidebar {
+  width: 250px;
+  background: var(--surface-dark);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 10px 15px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.file-tree { list-style: none; padding: 0 10px; }
+.file-item {
+  padding: 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.file-item:hover { background: #2a2d2e; }
+.file-item.active { background: #37373d; color: var(--text-bright); }
+
+/* Main Panels Area */
+.panels-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Editor Tabs */
+.tabs-bar {
+  height: 35px;
+  background: var(--surface-dark);
+  display: flex;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  background: var(--surface-dark);
+  border-right: 1px solid var(--border);
+  color: #969696;
+  cursor: pointer;
+  min-width: 150px;
+}
+.tab.active { background: var(--bg); color: var(--text-bright); border-top: 1px solid var(--accent); }
+
+/* Editor Content (Grid + Charts split) */
+.editor-content {
+  flex: 1;
+  background: var(--bg);
+  display: flex;
+}
+
+.data-view {
+  flex: 2;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-view {
+  flex: 1;
+  background: var(--surface-dark);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Bottom Terminal (AI Chat) */
+.terminal-panel {
+  height: 250px;
+  border-top: 1px solid var(--border);
+  background: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-tabs {
+  display: flex;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--border);
+}
+.term-tab { padding: 8px 15px; text-transform: uppercase; font-size: 0.75rem; cursor: pointer; }
+.term-tab.active { color: var(--text-bright); border-bottom: 1px solid var(--accent); }
+
+.terminal-content {
+  flex: 1;
+  padding: 10px 15px;
+  font-family: 'JetBrains Mono', monospace;
+  overflow-y: auto;
+}
+
+.log-line { margin-bottom: 5px; line-height: 1.4; }
+.log-prompt { color: #4af626; }
+.log-info { color: #3b8eea; }
+.log-warn { color: #f14c4c; }
+
+/* Data Table Fake */
+.grid-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+.grid-table th { text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--border); color: #858585; font-weight: normal; }
+.grid-table td { padding: 4px 8px; border-bottom: 1px dashed #2b2b2b; }
+.grid-table tr:hover { background: #2a2d2e; }
+
+/* Small charts */
+.mini-chart-card {
+  background: #252526; border: 1px solid var(--border); border-radius: 4px; padding: 10px;
+}
+.chart-title { font-size: 0.75rem; color: #858585; text-transform: uppercase; margin-bottom: 10px; }
+
+</style>
+</head>
+<body>
+
+<div class="menu-bar">
+  <div class="menu-item" style="font-weight: 600;">DataLens Pro</div>
+  <div class="menu-item">Файл</div>
+  <div class="menu-item">Правка</div>
+  <div class="menu-item">Вид</div>
+  <div class="menu-item">Терминал</div>
+  <div class="menu-item">ИИ-Анализ</div>
+</div>
+
+<div class="workbench">
+  
+  <div class="activity-bar">
+    <div class="activity-icon active">📁</div>
+    <div class="activity-icon">🔍</div>
+    <div class="activity-icon">📊</div>
+    <div class="activity-icon">🤖</div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-header">Workspace</div>
+    <ul class="file-tree">
+      <li class="file-item active">📄 1c_sales_march.csv</li>
+      <li class="file-item">📄 wb_returns_Q1.xlsx</li>
+      <li class="file-item" style="color: #4af626">⚙️ ai_insight_report.json</li>
+    </ul>
+  </div>
+
+  <div class="panels-container">
+    
+    <div class="tabs-bar">
+      <div class="tab active">1c_sales_march.csv</div>
+      <div class="tab">Dashboard View</div>
+    </div>
+
+    <div class="editor-content">
+      <div class="data-view">
+        <table class="grid-table">
+          <tr><th>ID</th><th>SKU</th><th>CATEGORY</th><th>REVENUE</th><th>LOGISTICS</th></tr>
+          <tr><td style="color: #569cd6">1</td><td style="color: #ce9178">"JKT-01"</td><td>Outerwear</td><td style="color: #b5cea8">45000</td><td style="color: #f14c4c">52000</td></tr>
+          <tr><td style="color: #569cd6">2</td><td style="color: #ce9178">"SHS-99"</td><td>Footwear</td><td style="color: #b5cea8">89000</td><td style="color: #b5cea8">12000</td></tr>
+          <tr><td style="color: #569cd6">3</td><td style="color: #ce9178">"BAG-22"</td><td>Accessories</td><td style="color: #b5cea8">34000</td><td style="color: #b5cea8">5000</td></tr>
+          <!-- Fake rows -->
+          <script>
+            for(let i=4; i<=15; i++) document.write(`<tr><td style="color: #569cd6">${i}</td><td style="color: #ce9178">"ITEM-${i}"</td><td>General</td><td style="color: #b5cea8">${Math.floor(Math.random()*100000)}</td><td style="color: #b5cea8">${Math.floor(Math.random()*10000)}</td></tr>`);
+          </script>
+        </table>
+      </div>
+      
+      <div class="chart-view">
+        <div class="mini-chart-card">
+          <div class="chart-title">Revenue Trend</div>
+          <div style="height: 80px; display: flex; align-items: flex-end; gap: 2px;">
+            <div style="flex:1; background: var(--accent); height: 40%"></div>
+            <div style="flex:1; background: var(--accent); height: 50%"></div>
+            <div style="flex:1; background: var(--accent); height: 80%"></div>
+            <div style="flex:1; background: var(--accent); height: 60%"></div>
+            <div style="flex:1; background: var(--accent); height: 90%"></div>
+          </div>
+        </div>
+        <div class="mini-chart-card">
+          <div class="chart-title">Loss Makers (Logistics)</div>
+          <div style="color: var(--error); font-size: 1.5rem; font-weight: 600;">JKT-01</div>
+          <div style="color: #858585;">Margin: -15%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="terminal-panel">
+      <div class="terminal-tabs">
+        <div class="term-tab">Problems</div>
+        <div class="term-tab">Output</div>
+        <div class="term-tab active">AI Terminal</div>
+      </div>
+      <div class="terminal-content">
+        <div class="log-line"><span class="log-info">[INFO]</span> Loading dataset 1c_sales_march.csv... Done (14.2ms)</div>
+        <div class="log-line"><span class="log-info">[INFO]</span> AI Agent analyzing 15,000 rows...</div>
+        <div class="log-line"><span class="log-warn">[WARN]</span> Found 1 critical anomaly in logistics costs.</div>
+        <div class="log-line">AI: <span style="color: var(--text-bright)">I have identified that "JKT-01" is generating a net loss due to high logistics costs vs revenue. Recommended action: Adjust pricing or investigate return rates.</span></div>
+        <div class="log-line" style="margin-top: 10px;">
+          <span class="log-prompt">user@datalens:~$</span> <span style="opacity: 0.7">Generate PDF report for management_</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

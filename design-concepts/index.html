@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Дизайн-концепты</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #111;
+  color: #fff;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.toolbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center;
+  padding: 0 1.5rem;
+  height: 52px;
+  gap: 1.5rem;
+}
+
+.toolbar-label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.concept-tabs {
+  display: flex; gap: 4px;
+}
+
+.concept-tab {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.5);
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.concept-tab:hover {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.8);
+}
+
+.concept-tab.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+  font-weight: 600;
+}
+
+.ai-tab {
+  border-color: rgba(255, 235, 59, 0.4);
+  color: rgba(255, 235, 59, 0.8);
+}
+
+.ai-tab:hover {
+  background: rgba(255, 235, 59, 0.1);
+  color: #ffeb3b;
+}
+
+.ai-tab.active {
+  background: #ffeb3b;
+  color: #000;
+  border-color: #ffeb3b;
+}
+
+.separator {
+  width: 1px; height: 24px;
+  background: rgba(255,255,255,0.12);
+  flex-shrink: 0;
+}
+
+.concept-name {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  flex: 1;
+}
+
+iframe {
+  position: fixed;
+  top: 52px; left: 0;
+  width: 100%;
+  height: calc(100vh - 52px);
+  border: none;
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="toolbar-label">Концепт</span>
+  <div class="concept-tabs">
+    <button class="concept-tab active" onclick="load(1, this)">1</button>
+    <button class="concept-tab" onclick="load(2, this)">2</button>
+    <button class="concept-tab" onclick="load(3, this)">3</button>
+    <button class="concept-tab" onclick="load(4, this)">4</button>
+    <button class="concept-tab" onclick="load(5, this)">5</button>
+    <button class="concept-tab" onclick="load(6, this)">6</button>
+    <button class="concept-tab" onclick="load(7, this)">7</button>
+    <button class="concept-tab" onclick="load(8, this)">8</button>
+    <button class="concept-tab" onclick="load(9, this)">9</button>
+    <button class="concept-tab" onclick="load(10, this)">10</button>
+    
+    <div class="separator" style="margin: 0 4px;"></div>
+    <span class="toolbar-label" style="align-self: center; margin-right: 4px; color: #ffeb3b;">AI Concepts</span>
+    
+    <button class="concept-tab ai-tab" onclick="load(11, this)">11</button>
+    <button class="concept-tab ai-tab" onclick="load(12, this)">12</button>
+    <button class="concept-tab ai-tab" onclick="load(13, this)">13</button>
+    <button class="concept-tab ai-tab" onclick="load(14, this)">14</button>
+    <button class="concept-tab ai-tab" onclick="load(15, this)">15</button>
+  </div>
+  <div class="separator"></div>
+  <span class="concept-name" id="name">Noir Editorial</span>
+</div>
+
+<iframe id="frame" src="concept-1-noir-editorial.html"></iframe>
+
+<script>
+const concepts = {
+  1: { file: 'concept-1-noir-editorial.html', name: 'Noir Editorial' },
+  2: { file: 'concept-2-soft-glass.html', name: 'Soft Glass' },
+  3: { file: 'concept-3-brutalist-data.html', name: 'Brutalist Data' },
+  4: { file: 'concept-4-aurora-gradient.html', name: 'Swiss Industrial' },
+  5: { file: 'concept-5-warm-minimal.html', name: 'Warm Minimal' },
+  6: { file: 'concept-6-cyberpunk-neon.html', name: 'Cyberpunk Neon' },
+  7: { file: 'concept-7-paper-craft.html', name: 'Paper Craft' },
+  8: { file: 'concept-8-retro-terminal.html', name: 'Retro Terminal' },
+  9: { file: 'concept-9-luxury-deco.html', name: 'Luxury Art Deco' },
+    10: { file: 'concept-10-vapor-gradient.html', name: 'Vapor Gradient' },
+    11: { file: 'concept-11-neo-brutalism.html', name: 'Bauhaus Grid' },
+    12: { file: 'concept-12-e-ink.html', name: 'Dark Aurora' },
+    13: { file: 'concept-13-y2k-cyber.html', name: 'Editorial Minimal' },
+    14: { file: 'concept-14-organic-clay.html', name: 'Organic Clay (Favorite)' },
+    15: { file: 'concept-15-synthwave.html', name: 'Bento Box UI' },
+};
+
+function load(n, btn) {
+  document.getElementById('frame').src = concepts[n].file;
+  document.getElementById('name').textContent = concepts[n].name;
+  document.querySelectorAll('.concept-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

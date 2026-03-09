@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Концепт 15: Corporate Luxury</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f172a; /* deep navy */
+  --surface: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #d4af37; /* gold */
+  --accent-light: rgba(212, 175, 55, 0.1);
+  --border: #334155;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+}
+
+/* ===== NAV ===== */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem 4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo { font-size: 2rem; color: var(--accent); letter-spacing: 1px; }
+
+.nav-links { display: flex; gap: 3rem; }
+.nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; transition: color 0.3s; }
+.nav-links a:hover { color: var(--accent); }
+
+.nav-cta {
+  background: transparent; color: var(--accent);
+  border: 1px solid var(--accent); padding: 0.6rem 2rem;
+  font-family: inherit; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+  cursor: pointer; transition: all 0.3s;
+}
+.nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+/* ===== PAGE SECTIONS ===== */
+.page { display: none; min-height: calc(100vh - 80px); }
+.page.active { display: block; }
+
+/* ===== LANDING ===== */
+.hero { text-align: center; padding: 6rem 2rem; max-width: 900px; margin: 0 auto; }
+.hero-subtitle { color: var(--accent); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 2rem; }
+.hero-title { font-size: 4.5rem; line-height: 1.1; margin-bottom: 2rem; }
+.hero-desc { font-size: 1.1rem; color: var(--text-muted); font-weight: 300; line-height: 1.8; margin-bottom: 3rem; padding: 0 4rem; }
+
+/* ===== DASHBOARD ===== */
+.dashboard { display: grid; grid-template-columns: 250px 1fr; min-height: calc(100vh - 80px); }
+.sidebar { border-right: 1px solid var(--border); padding: 3rem 2rem; }
+.sidebar-nav { list-style: none; }
+.sidebar-nav li { margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 1px; cursor: pointer; transition: color 0.3s; }
+.sidebar-nav li:hover, .sidebar-nav li.active { color: var(--accent); }
+
+.main-content { padding: 3rem 4rem; }
+.content-header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 3rem; }
+.content-title { font-size: 2.5rem; }
+
+.upload-card {
+  background: var(--surface); border: 1px dashed var(--border);
+  padding: 4rem; text-align: center; margin-bottom: 3rem;
+  transition: border-color 0.3s; cursor: pointer;
+}
+.upload-card:hover { border-color: var(--accent); }
+.upload-icon { font-size: 2rem; color: var(--accent); margin-bottom: 1rem; }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; padding: 1rem; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+.data-table td { padding: 1.5rem 1rem; border-bottom: 1px solid var(--surface); font-size: 0.95rem; }
+
+/* ===== ANALYSIS ===== */
+.analysis-layout { display: grid; grid-template-columns: 1fr 450px; min-height: calc(100vh - 80px); }
+.analysis-main { padding: 3rem 4rem; border-right: 1px solid var(--border); }
+
+.kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem; }
+.kpi-card { background: var(--surface); padding: 2rem; border-top: 2px solid var(--accent); }
+.kpi-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+.kpi-value { font-size: 2.5rem; font-family: 'Cormorant Garamond', serif; }
+
+.insight-list { margin-bottom: 3rem; }
+.insight-item { border-left: 2px solid var(--accent); padding-left: 1.5rem; margin-bottom: 1.5rem; }
+.insight-title { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent); }
+.insight-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+
+.chat-panel { display: flex; flex-direction: column; background: var(--surface); }
+.chat-header { padding: 2rem; border-bottom: 1px solid var(--border); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; }
+.chat-messages { flex: 1; padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem; }
+.msg { padding: 1rem 1.5rem; font-size: 0.9rem; line-height: 1.6; max-width: 85%; }
+.msg.ai { background: var(--bg); color: var(--text-main); align-self: flex-start; border-left: 2px solid var(--accent); }
+.msg.user { background: var(--accent-light); color: var(--accent); align-self: flex-end; border-right: 2px solid var(--accent); }
+.chat-input-area { padding: 2rem; border-top: 1px solid var(--border); }
+.chat-input { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text-main); padding: 1rem; font-family: inherit; font-size: 0.9rem; outline: none; transition: border-color 0.3s; }
+.chat-input:focus { border-color: var(--accent); }
+
+/* ===== SWITCHER ===== */
+.page-switcher {
+  position: fixed; bottom: 2rem; right: 2rem; display: flex; gap: 1rem;
+}
+.page-switcher button {
+  background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);
+  padding: 0.5rem 1rem; font-family: inherit; font-size: 0.8rem; cursor: pointer; transition: all 0.3s;
+}
+.page-switcher button.active, .page-switcher button:hover {
+  background: var(--accent); color: var(--bg); border-color: var(--accent);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">DataLens.</div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('landing')">Платформа</a>
+    <a href="#" onclick="showPage('dashboard')">Портфель</a>
+    <a href="#" onclick="showPage('analysis')">Аналитика</a>
+  </div>
+  <button class="nav-cta">Авторизация</button>
+</nav>
+
+<div id="landing" class="page active">
+  <section class="hero">
+    <div class="hero-subtitle">Интеллект для вашего бизнеса</div>
+    <h1 class="hero-title">Превосходство в каждом решении.</h1>
+    <p class="hero-desc">
+      Аналитическая платформа премиум-класса. Загрузите данные из 1С или маркетплейсов и получите кристально ясные инсайты для роста вашей прибыли.
+    </p>
+    <button class="nav-cta" style="padding: 1rem 3rem;" onclick="showPage('dashboard')">Приступить</button>
+  </section>
+</div>
+
+<div id="dashboard" class="page">
+  <div class="dashboard">
+    <aside class="sidebar">
+      <ul class="sidebar-nav">
+        <li class="active">Источники данных</li>
+        <li>Регулярные отчеты</li>
+        <li>Настройки профиля</li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <div class="content-header">
+        <h2 class="content-title">Источники данных</h2>
+      </div>
+      <div class="upload-card">
+        <div class="upload-icon">✧</div>
+        <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem;">Импорт документов</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Форматы: CSV, XLSX. Максимальный размер: 50MB</p>
+      </div>
+      <table class="data-table">
+        <tr>
+          <th>Документ</th>
+          <th>Размер</th>
+          <th>Статус</th>
+        </tr>
+        <tr>
+          <td style="color: var(--accent);">Wildberries_Sales_2025.xlsx</td>
+          <td>4.2 MB</td>
+          <td>Успешно проанализирован</td>
+        </tr>
+        <tr>
+          <td>1C_Financial_Report.csv</td>
+          <td>12.8 MB</td>
+          <td style="color: var(--text-muted);">В очереди на обработку</td>
+        </tr>
+      </table>
+    </main>
+  </div>
+</div>
+
+<div id="analysis" class="page">
+  <div class="analysis-layout">
+    <div class="analysis-main">
+      <div class="content-header" style="margin-bottom: 2rem;">
+        <h2 class="content-title">Финансовый свод: WB_Sales</h2>
+      </div>
+      
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Выручка</div>
+          <div class="kpi-value">14.2M ₽</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Чистая Маржа</div>
+          <div class="kpi-value">28.4%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Рентабельность</div>
+          <div class="kpi-value">+4.2%</div>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 1.5rem;">Ключевые инсайты</h3>
+      <div class="insight-list">
+        <div class="insight-item">
+          <div class="insight-title">Высокая стоимость логистики</div>
+          <div class="insight-desc">В категории "Верхняя одежда" логистические издержки съедают до 60% потенциальной прибыли. Рекомендуется пересмотр ценовой политики.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-title">Стабильный рост спроса</div>
+          <div class="insight-desc">Наблюдается устойчивый тренд роста продаж аксессуаров (коэффициент детерминации 0.88).</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="chat-panel">
+      <div class="chat-header">AI-Аналитик</div>
+      <div class="chat-messages">
+        <div class="msg ai">Приветствую. Финансовые данные успешно структурированы. Какая информация вас интересует?</div>
+        <div class="msg user">Какие товары следует вывести из ассортимента?</div>
+        <div class="msg ai">Основываясь на соотношении процента возвратов (более 40%) и стоимости логистики, я рекомендую приостановить закупки артикулов: 104-A, 105-B и 209-C. Их реализация приносит чистый убыток компании.</div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" placeholder="Введите ваш запрос..." />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-switcher">
+  <button class="active" onclick="showPage('landing')">1</button>
+  <button onclick="showPage('dashboard')">2</button>
+  <button onclick="showPage('analysis')">3</button>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.page-switcher button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+.DS_Store
+.env
+.env.*
+*.pyc
+
+.claude/settings.local.json
+
+backend/.venv/
+backend/**/__pycache__/
+
+frontend/node_modules/
+frontend/.svelte-kit/
+frontend/build/

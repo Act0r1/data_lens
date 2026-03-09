@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Концепт 13: Neo-Memphis Pastel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffe0e9;
+  --fg: #111;
+  --panel: #fff;
+  --accent1: #bbf0db; /* mint */
+  --accent2: #d4c4fb; /* purple */
+  --accent3: #ffeb3b; /* yellow */
+  --border: #111;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.brutal-border { border: 3px solid var(--border); box-shadow: 6px 6px 0 var(--border); }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 3rem; background: var(--panel);
+  border-bottom: 3px solid var(--border);
+}
+
+.logo { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
+.logo span { display: inline-block; background: var(--accent3); padding: 0 5px; transform: rotate(-3deg); border: 2px solid var(--border); }
+
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { color: var(--fg); text-decoration: none; font-weight: 700; font-size: 1.1rem; }
+.nav-links a:hover { text-decoration: underline; text-decoration-thickness: 3px; }
+
+.nav-cta {
+  background: var(--accent2); color: var(--fg);
+  padding: 0.8rem 2rem; border: 3px solid var(--border); cursor: pointer;
+  font-family: inherit; font-size: 1rem; font-weight: 800; text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--border); transition: transform 0.1s, box-shadow 0.1s;
+}
+.nav-cta:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--border); }
+
+/* ===== PAGE SECTIONS ===== */
+.page { display: none; min-height: 100vh; padding-top: 80px; }
+.page.active { display: block; }
+
+/* ===== LANDING ===== */
+.hero { display: flex; padding: 4rem; gap: 4rem; align-items: center; min-height: calc(100vh - 80px); }
+.hero-left { flex: 1; }
+.hero-title { font-size: 5rem; font-weight: 800; line-height: 0.9; margin-bottom: 2rem; text-transform: uppercase; }
+.hero-title .highlight { background: var(--accent1); padding: 0 10px; display: inline-block; transform: rotate(2deg); border: 3px solid var(--border); }
+.hero-desc { font-size: 1.4rem; font-weight: 700; margin-bottom: 3rem; max-width: 500px; }
+
+.hero-right { flex: 1; position: relative; }
+.abstract-shape { position: absolute; border: 3px solid var(--border); }
+.shape1 { width: 200px; height: 200px; background: var(--accent3); border-radius: 50%; top: -50px; right: 0; box-shadow: 8px 8px 0 var(--border); }
+.shape2 { width: 150px; height: 150px; background: var(--accent2); bottom: -30px; left: 20px; transform: rotate(15deg); box-shadow: 8px 8px 0 var(--border); }
+.main-card { position: relative; background: var(--panel); padding: 3rem; z-index: 10; transform: rotate(-2deg); }
+
+/* ===== DASHBOARD ===== */
+.dashboard { padding: 3rem; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 3rem; }
+
+.sidebar { background: var(--panel); padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+.sidebar-item { padding: 1rem; border: 3px solid transparent; font-weight: 800; font-size: 1.2rem; cursor: pointer; transition: all 0.2s; }
+.sidebar-item:hover { border-color: var(--border); background: var(--accent1); }
+.sidebar-item.active { background: var(--accent3); border-color: var(--border); box-shadow: 4px 4px 0 var(--border); transform: translate(-4px, -4px); }
+
+.upload-zone { background: var(--accent2); padding: 5rem; text-align: center; margin-bottom: 3rem; font-size: 2rem; font-weight: 800; cursor: pointer; }
+.file-row { background: var(--panel); padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.2rem; }
+.status-pill { background: var(--accent1); padding: 0.5rem 1rem; border: 2px solid var(--border); border-radius: 50px; font-size: 0.9rem; }
+
+/* ===== ANALYSIS ===== */
+.analysis-layout { padding: 3rem; display: grid; grid-template-columns: 1fr 450px; gap: 3rem; max-width: 1600px; margin: 0 auto; }
+
+.insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+.insight-card { background: var(--panel); padding: 2rem; }
+.insight-card.highlight { background: var(--accent3); }
+.insight-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; border-bottom: 3px solid var(--border); padding-bottom: 0.5rem; }
+
+.chat-panel { background: var(--panel); display: flex; flex-direction: column; height: 80vh; }
+.chat-header { background: var(--accent1); padding: 1.5rem; border-bottom: 3px solid var(--border); font-weight: 800; font-size: 1.5rem; }
+.chat-messages { flex: 1; padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem; }
+.msg { padding: 1rem 1.5rem; border: 3px solid var(--border); font-weight: 700; border-radius: 20px; max-width: 85%; }
+.msg.ai { background: var(--bg); align-self: flex-start; border-bottom-left-radius: 0; }
+.msg.user { background: var(--accent2); align-self: flex-end; border-bottom-right-radius: 0; }
+.chat-input-area { padding: 1.5rem; border-top: 3px solid var(--border); display: flex; gap: 1rem; background: #fff; }
+.chat-input { flex: 1; padding: 1rem; border: 3px solid var(--border); font-family: inherit; font-size: 1.1rem; font-weight: 700; }
+.chat-send { background: var(--accent3); border: 3px solid var(--border); padding: 0 1.5rem; font-weight: 800; font-size: 1.5rem; cursor: pointer; box-shadow: 4px 4px 0 var(--border); }
+
+/* ===== SWITCHER ===== */
+.page-switcher {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 1rem; background: var(--panel); padding: 1rem; z-index: 200;
+}
+.page-switcher button {
+  background: #fff; border: 3px solid var(--border); padding: 0.5rem 1.5rem;
+  font-family: inherit; font-weight: 800; cursor: pointer; box-shadow: 4px 4px 0 var(--border);
+}
+.page-switcher button.active { background: var(--accent1); transform: translate(4px, 4px); box-shadow: 0 0 0 var(--border); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Data<span>Lens</span></div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('landing')">Start</a>
+    <a href="#" onclick="showPage('dashboard')">Files</a>
+    <a href="#" onclick="showPage('analysis')">Chat</a>
+  </div>
+  <button class="nav-cta">Login</button>
+</nav>
+
+<div id="landing" class="page active">
+  <section class="hero">
+    <div class="hero-left">
+      <h1 class="hero-title">Аналитика<br>без <span class="highlight">скуки</span></h1>
+      <p class="hero-desc">Загружай свои таблицы из 1С и маркетплейсов. ИИ найдет инсайты, пока ты пьешь кофе.</p>
+      <button class="nav-cta" style="font-size: 1.5rem; padding: 1rem 3rem;" onclick="showPage('dashboard')">Поехали!</button>
+    </div>
+    <div class="hero-right">
+      <div class="abstract-shape shape1"></div>
+      <div class="abstract-shape shape2"></div>
+      <div class="main-card brutal-border">
+        <h3 style="font-size: 2rem; margin-bottom: 1rem;">Авто-отчет WB</h3>
+        <div style="height: 30px; background: var(--bg); border: 3px solid var(--border); margin-bottom: 10px; width: 80%;"></div>
+        <div style="height: 30px; background: var(--accent1); border: 3px solid var(--border); margin-bottom: 10px; width: 60%;"></div>
+        <div style="height: 30px; background: var(--accent2); border: 3px solid var(--border); margin-bottom: 10px; width: 90%;"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="dashboard" class="page">
+  <div class="dashboard">
+    <aside class="sidebar brutal-border">
+      <div class="sidebar-item active">Мои данные</div>
+      <div class="sidebar-item">Подписка</div>
+    </aside>
+    <main>
+      <div class="upload-zone brutal-border">
+        + ПЕРЕТАЩИ CSV СЮДА
+      </div>
+      <div class="file-row brutal-border">
+        <span>ozon_sales_2025.csv</span>
+        <span class="status-pill">ГОТОВО</span>
+      </div>
+      <div class="file-row brutal-border" style="opacity: 0.6;">
+        <span>1c_base_export.xlsx</span>
+        <span class="status-pill" style="background: var(--bg);">ОБРАБОТКА</span>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="analysis" class="page">
+  <div class="analysis-layout">
+    <div class="analysis-main">
+      <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 2rem; text-transform: uppercase;">Результаты</h2>
+      <div class="insights-grid">
+        <div class="insight-card brutal-border">
+          <h3>Тренд продаж</h3>
+          <p style="font-size: 1.2rem; font-weight: 700;">Стабильный рост +12% в месяц.</p>
+        </div>
+        <div class="insight-card highlight brutal-border">
+          <h3>Внимание!</h3>
+          <p style="font-size: 1.2rem; font-weight: 700;">5 товаров работают в минус из-за логистики.</p>
+        </div>
+      </div>
+      <div class="brutal-border" style="background: var(--panel); height: 300px; padding: 2rem; font-size: 1.5rem; font-weight: 800; color: #999; display: flex; align-items: center; justify-content: center;">
+        ГРАФИК ВЫРУЧКИ
+      </div>
+    </div>
+    <div class="chat-panel brutal-border">
+      <div class="chat-header">ИИ-Помощник</div>
+      <div class="chat-messages">
+        <div class="msg ai">Привет! Я изучил твой файл Ozon. Что будем искать?</div>
+        <div class="msg user">Какие артикулы убыточны?</div>
+        <div class="msg ai">Нашел 5 артикулов. Самый проблемный: "Носки белые" — логистика съедает 110% маржи.</div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" placeholder="Спроси меня..." />
+        <button class="chat-send">></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-switcher brutal-border">
+  <button class="active" onclick="showPage('landing')">Лендинг</button>
+  <button onclick="showPage('dashboard')">Дашборд</button>
+  <button onclick="showPage('analysis')">Анализ</button>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.page-switcher button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

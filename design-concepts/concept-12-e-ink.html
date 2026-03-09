@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Dark Aurora</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #09090b;
+  --bg-card: rgba(24, 24, 27, 0.4);
+  --fg: #fafafa;
+  --fg-muted: #a1a1aa;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent: #8b5cf6;
+  --accent-glow: rgba(139, 92, 246, 0.4);
+  --cyan: #06b6d4;
+  --cyan-glow: rgba(6, 182, 212, 0.4);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* AURORA BACKGROUND */
+.aurora-bg {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden;
+}
+.blob {
+  position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.6;
+}
+.blob-1 { width: 500px; height: 500px; background: var(--accent-glow); top: -200px; left: -100px; animation: float 20s ease-in-out infinite alternate; }
+.blob-2 { width: 600px; height: 600px; background: var(--cyan-glow); bottom: -300px; right: -200px; animation: float 25s ease-in-out infinite alternate-reverse; }
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(50px, 50px) scale(1.1); }
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  width: 90%; max-width: 1000px; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 20px;
+  background: rgba(9, 9, 11, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+}
+.logo { font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 24px; height: 24px; border-radius: 6px; background: linear-gradient(135deg, var(--accent), var(--cyan)); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { color: var(--fg-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--fg); }
+.nav-cta {
+  background: var(--fg); color: var(--bg);
+  padding: 8px 20px; border-radius: 100px; border: none;
+  font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(255,255,255,0.2); }
+
+/* HERO */
+.hero {
+  padding: 150px 20px 80px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 6px 16px; border-radius: 100px;
+  font-size: 0.85rem; color: var(--fg-muted); font-weight: 500;
+  margin-bottom: 2rem; backdrop-filter: blur(10px);
+}
+.hero-badge span { background: linear-gradient(90deg, var(--accent), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; }
+.hero-title {
+  font-size: 4.5rem; font-weight: 800; line-height: 1.1; letter-spacing: -2px; margin-bottom: 1.5rem;
+}
+.hero-desc {
+  font-size: 1.2rem; color: var(--fg-muted); line-height: 1.6; margin-bottom: 3rem; max-width: 600px; margin-inline: auto; font-weight: 300;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--cyan)); color: #fff;
+  border: none; padding: 1rem 2.5rem; font-family: inherit; font-size: 1.1rem; font-weight: 600;
+  border-radius: 100px; cursor: pointer; box-shadow: 0 10px 30px var(--accent-glow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 40px var(--cyan-glow); }
+
+/* MOCKUP */
+.hero-mockup {
+  margin-top: 5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; gap: 15px;
+}
+.mockup-header { display: flex; gap: 8px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+.mockup-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--border); }
+.mockup-body { display: grid; grid-template-columns: 1fr 2fr; gap: 15px; height: 300px; }
+.mockup-panel { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+.mockup-stat { font-size: 3rem; font-weight: 800; background: linear-gradient(90deg, #fff, var(--fg-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.mockup-label { font-size: 0.9rem; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+/* FEATURES */
+.features { padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; }
+.sec-title { font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 4rem; letter-spacing: -1px; }
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.feat-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
+  padding: 2.5rem; backdrop-filter: blur(10px); transition: border-color 0.3s;
+}
+.feat-card:hover { border-color: var(--accent); }
+.feat-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--accent-glow); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1.5rem; margin-bottom: 1.5rem; }
+.feat-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.75rem; }
+.feat-desc { font-size: 0.95rem; color: var(--fg-muted); line-height: 1.6; }
+
+/* PRICING */
+.pricing { padding: 4rem 2rem 8rem; max-width: 1000px; margin: 0 auto; }
+.price-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+.price-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px;
+  padding: 3rem; backdrop-filter: blur(10px); position: relative; overflow: hidden;
+}
+.price-card.pro { border-color: var(--accent); }
+.price-card.pro::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at top right, var(--accent-glow), transparent 70%); z-index: -1; pointer-events: none;
+}
+.price-name { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
+.price-cost { font-size: 3.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -2px; }
+.price-period { color: var(--fg-muted); margin-bottom: 2rem; font-size: 1rem; }
+.price-list { list-style: none; margin-bottom: 2.5rem; }
+.price-list li { margin-bottom: 1rem; color: var(--fg-muted); display: flex; align-items: center; gap: 10px; }
+.price-list li::before { content: '✓'; color: var(--cyan); font-weight: bold; }
+.price-btn { width: 100%; padding: 1rem; border-radius: 100px; border: 1px solid var(--border); background: transparent; color: var(--fg); font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.price-card.pro .price-btn { background: var(--fg); color: var(--bg); border: none; }
+.price-card.pro .price-btn:hover { background: #e4e4e7; }
+.price-btn:hover { background: rgba(255,255,255,0.05); }
+
+</style>
+</head>
+<body>
+
+<div class="aurora-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+</div>
+
+<nav>
+  <div class="logo"><div class="logo-icon"></div> DataLens</div>
+  <div class="nav-links">
+    <a href="#">Продукт</a>
+    <a href="#">Возможности</a>
+    <a href="#">Тарифы</a>
+  </div>
+  <button class="nav-cta">Войти</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">✨ <span>Новое:</span> Анализ маркетплейсов за секунды</div>
+  <h1 class="hero-title">Сделайте данные<br>прозрачными</h1>
+  <p class="hero-desc">Загрузите CSV из WB, Ozon или 1С. Наш AI-ассистент мгновенно проанализирует их, найдет точки роста и скрытые убытки.</p>
+  <button class="btn-primary">Попробовать бесплатно</button>
+  
+  <div class="hero-mockup">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+    </div>
+    <div class="mockup-body">
+      <div class="mockup-panel">
+        <div class="mockup-label">Чистая прибыль</div>
+        <div class="mockup-stat">2.4M ₽</div>
+        <div style="color: #10b981; font-weight: 500; margin-top: 10px;">+14% к февралю</div>
+      </div>
+      <div class="mockup-panel" style="background: rgba(139, 92, 246, 0.05); border-color: rgba(139, 92, 246, 0.2);">
+        <div class="mockup-label" style="color: #c4b5fd;">AI Инсайт</div>
+        <p style="font-size: 1.2rem; margin-top: 10px; line-height: 1.5;">Найдено 5 убыточных товаров. Стоимость логистики превышает их маржинальность из-за частых возвратов. Рекомендуется пересмотр цены.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <h2 class="sec-title">Интеллект, работающий на вас</h2>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">⚡</div>
+      <h3 class="feat-title">Мгновенный парсинг</h3>
+      <p class="feat-desc">Никакой ручной чистки. Алгоритм сам определяет кодировку, разделители и форматы данных из любого CSV.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🛍️</div>
+      <h3 class="feat-title">Понимание WB и Ozon</h3>
+      <p class="feat-desc">Система из коробки знает структуру отчетов маркетплейсов и понимает, как считать логистику и комиссии.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">💬</div>
+      <h3 class="feat-title">Диалог с цифрами</h3>
+      <p class="feat-desc">Спросите у данных "какие товары приносят минус?" в удобном чат-интерфейсе.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <h2 class="sec-title">Тарифы без сюрпризов</h2>
+  <div class="price-grid">
+    <div class="price-card">
+      <h3 class="price-name">Стартовый</h3>
+      <div class="price-cost">990 ₽</div>
+      <div class="price-period">в месяц</div>
+      <ul class="price-list">
+        <li>До 30 файлов в месяц</li>
+        <li>Объем файла до 20 МБ</li>
+        <li>Анализ маркетплейсов</li>
+        <li>Базовый AI-чат</li>
+      </ul>
+      <button class="price-btn">Начать работу</button>
+    </div>
+    <div class="price-card pro">
+      <h3 class="price-name">Бизнес (Популярный)</h3>
+      <div class="price-cost">3 990 ₽</div>
+      <div class="price-period">в месяц</div>
+      <ul class="price-list">
+        <li>Неограниченно файлов</li>
+        <li>Объем файла до 50 МБ</li>
+        <li>Глубокий поиск аномалий</li>
+        <li>Экспорт отчетов в PDF</li>
+      </ul>
+      <button class="price-btn">Выбрать тариф</button>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

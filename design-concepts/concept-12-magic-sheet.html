@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Концепт 12: Magic Spreadsheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cell-border: #e2e8f0;
+  --header-bg: #f1f5f9;
+  --ai-color: #8b5cf6;
+  --ai-bg: #f5f3ff;
+  --bg: #ffffff;
+  --text: #334155;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Toolbar */
+.toolbar {
+  height: 50px;
+  background: white;
+  border-bottom: 1px solid var(--cell-border);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 1rem;
+}
+
+.brand { font-weight: 600; color: #0f172a; padding-right: 1rem; border-right: 1px solid var(--cell-border); }
+.file-name { font-size: 0.9rem; font-weight: 500; }
+.tool-btn { 
+  background: none; border: 1px solid transparent; 
+  padding: 4px 8px; border-radius: 4px; cursor: pointer;
+  color: var(--text); font-size: 0.85rem;
+}
+.tool-btn:hover { background: var(--header-bg); }
+.ai-magic-btn {
+  background: var(--ai-bg); color: var(--ai-color); border: 1px solid #ddd6fe; font-weight: 500; margin-left: auto;
+}
+
+/* Spreadsheet Grid */
+.spreadsheet {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 50px repeat(6, 1fr) 2fr;
+  grid-auto-rows: 35px;
+  overflow: auto;
+  background: var(--cell-border);
+  gap: 1px;
+}
+
+.cell {
+  background: white;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell.header {
+  background: var(--header-bg);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: #64748b;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.cell.row-num {
+  background: var(--header-bg);
+  color: #94a3b8;
+  justify-content: center;
+  position: sticky;
+  left: 0;
+  z-index: 5;
+}
+
+/* AI Highlighted Cells */
+.cell.highlight-red { background: #fef2f2; color: #dc2626; }
+.cell.highlight-green { background: #f0fdf4; color: #16a34a; }
+
+/* Floating AI Widget Overlay */
+.ai-overlay {
+  position: absolute;
+  top: 100px;
+  right: 40px;
+  width: 350px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border: 1px solid #ddd6fe;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.ai-header {
+  background: var(--ai-color);
+  color: white;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-body {
+  padding: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.ai-chart {
+  height: 120px;
+  border: 1px dashed var(--cell-border);
+  margin-top: 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-end;
+  padding: 10px;
+  gap: 5px;
+}
+
+.ai-bar {
+  flex: 1;
+  background: #c4b5fd;
+  border-radius: 2px 2px 0 0;
+}
+
+.ai-bar.negative { background: #fca5a5; }
+
+.ai-input-zone {
+  border-top: 1px solid var(--cell-border);
+  padding: 0.5rem;
+  background: #fafafa;
+}
+
+.ai-input {
+  width: 100%;
+  border: 1px solid var(--cell-border);
+  padding: 0.5rem 0.8rem;
+  border-radius: 20px;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+.ai-input:focus { border-color: var(--ai-color); }
+
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="brand">DataLens</div>
+  <div class="file-name">Ozon_Report_Q1_2025.csv</div>
+  <button class="tool-btn">Файл</button>
+  <button class="tool-btn">Правка</button>
+  <button class="tool-btn">Вид</button>
+  <button class="tool-btn">Данные</button>
+  <button class="tool-btn ai-magic-btn">✨ AI Анализ</button>
+</div>
+
+<div class="spreadsheet">
+  <!-- Headers -->
+  <div class="cell header row-num"></div>
+  <div class="cell header">A (Артикул)</div>
+  <div class="cell header">B (Название)</div>
+  <div class="cell header">C (Категория)</div>
+  <div class="cell header">D (Продажи, шт)</div>
+  <div class="cell header">E (Выручка, ₽)</div>
+  <div class="cell header">F (Логистика, ₽)</div>
+  <div class="cell header">G (Чистая прибыль, ₽)</div>
+
+  <!-- Row 1 -->
+  <div class="cell row-num">1</div>
+  <div class="cell">OZ-1029</div>
+  <div class="cell">Футболка белая базовая</div>
+  <div class="cell">Одежда</div>
+  <div class="cell">1,204</div>
+  <div class="cell">1,083,600</div>
+  <div class="cell">120,400</div>
+  <div class="cell highlight-green">450,200</div>
+
+  <!-- Row 2 -->
+  <div class="cell row-num">2</div>
+  <div class="cell">OZ-4421</div>
+  <div class="cell">Сумка шоппер черная</div>
+  <div class="cell">Аксессуары</div>
+  <div class="cell">842</div>
+  <div class="cell">421,000</div>
+  <div class="cell">280,000</div>
+  <div class="cell highlight-red">-12,400</div>
+
+  <!-- Row 3 -->
+  <div class="cell row-num">3</div>
+  <div class="cell">OZ-9932</div>
+  <div class="cell">Очки солнцезащитные</div>
+  <div class="cell">Аксессуары</div>
+  <div class="cell">430</div>
+  <div class="cell">645,000</div>
+  <div class="cell">43,000</div>
+  <div class="cell highlight-green">380,000</div>
+
+  <!-- Row 4 -->
+  <div class="cell row-num">4</div>
+  <div class="cell">OZ-8821</div>
+  <div class="cell">Куртка демисезонная</div>
+  <div class="cell">Одежда</div>
+  <div class="cell">156</div>
+  <div class="cell">780,000</div>
+  <div class="cell">624,000</div>
+  <div class="cell highlight-red">-145,000</div>
+
+  <!-- Empty rows fill -->
+  <script>
+    for(let i=5; i<=25; i++) {
+      document.write(`<div class="cell row-num">${i}</div>`);
+      for(let j=0; j<7; j++) document.write(`<div class="cell"></div>`);
+    }
+  </script>
+</div>
+
+<!-- Floating AI Widget -->
+<div class="ai-overlay">
+  <div class="ai-header">
+    <span>✨ AI Аналитик</span>
+    <span style="cursor:pointer">×</span>
+  </div>
+  <div class="ai-body">
+    <p>Я выделил ячейки в колонке <b>G</b>. Найдено <b>2 критически убыточных товара</b> (OZ-4421, OZ-8821). </p>
+    <p style="margin-top: 10px;">Причина: Стоимость логистики (Колонка F) превышает маржинальность из-за высокого процента возвратов (покатушки).</p>
+    
+    <div class="ai-chart">
+      <div class="ai-bar" style="height: 80%" title="OZ-1029"></div>
+      <div class="ai-bar negative" style="height: 10%" title="OZ-4421"></div>
+      <div class="ai-bar" style="height: 60%" title="OZ-9932"></div>
+      <div class="ai-bar negative" style="height: 30%" title="OZ-8821"></div>
+    </div>
+  </div>
+  <div class="ai-input-zone">
+    <input type="text" class="ai-input" value="Сгруппируй убытки по категориям" />
+  </div>
+</div>
+
+</body>
+</html>

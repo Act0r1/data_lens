@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sadasd — фывфыв 2: Soft Glass</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700&family=Fraunces:ital,wght@0,300;0,600;0,900;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0ede8;
+  --fg: #1a1816;
+  --accent: #e8450e;
+  --accent-light: #fff0eb;
+  --muted: #8a857e;
+  --surface: rgba(255,255,255,0.6);
+  --glass: rgba(255,255,255,0.45);
+  --border: rgba(0,0,0,0.06);
+  --shadow: 0 8px 32px rgba(0,0,0,0.06);
+  --green: #1a8a4a;
+  --blue: #2563eb;
+  --radius: 20px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed; top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(232,69,14,0.12) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed; bottom: -300px; left: -100px;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
+  z-index: 100;
+  display: flex; align-items: center; gap: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem; font-weight: 900;
+}
+.logo span { color: var(--accent); }
+
+.nav-links { display: flex; gap: 0.25rem; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: 0.85rem; font-weight: 500;
+  padding: 0.4rem 0.9rem; border-radius: 100px;
+  transition: all 0.3s;
+}
+.nav-links a:hover { color: var(--fg); background: rgba(0,0,0,0.04); }
+
+.nav-cta {
+  background: var(--accent); color: white;
+  padding: 0.55rem 1.4rem; border: none; cursor: pointer;
+  font-family: inherit; font-size: 0.85rem; font-weight: 500;
+  border-radius: 100px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(232,69,14,0.3); }
+
+/* ===== PAGES ===== */
+.page { display: none; min-height: 100vh; position: relative; z-index: 1; }
+.page.active { display: block; }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  font-size: 0.8rem; color: var(--muted);
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s ease;
+}
+
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.hero-title {
+  font-family: 'Fraunces', serif;
+  font-size: 4.5rem; font-weight: 900;
+  line-height: 1.1; margin-bottom: 1.5rem;
+  max-width: 700px;
+  letter-spacing: -0.03em;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+
+.hero-title em {
+  font-style: italic; font-weight: 300;
+  color: var(--accent);
+}
+
+.hero-desc {
+  font-size: 1.1rem; color: var(--muted);
+  max-width: 500px; line-height: 1.6;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-actions {
+  display: flex; gap: 0.75rem;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+
+.btn-primary {
+  background: var(--fg); color: var(--bg);
+  padding: 0.9rem 2rem; border: none; cursor: pointer;
+  font-family: inherit; font-size: 0.9rem; font-weight: 500;
+  border-radius: var(--radius);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+.btn-soft {
+  background: var(--surface); color: var(--fg);
+  padding: 0.9rem 2rem; border: 1px solid var(--border); cursor: pointer;
+  font-family: inherit; font-size: 0.9rem; font-weight: 500;
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  transition: background 0.3s;
+}
+.btn-soft:hover { background: white; }
+
+/* ===== PREVIEW CARD ===== */
+.hero-preview {
+  margin-top: 4rem;
+  width: 100%; max-width: 900px;
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  padding: 1.5rem;
+  animation: fadeUp 1s ease 0.4s both;
+}
+
+.preview-header {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+.preview-dot:nth-child(1) { background: #ff5f57; }
+.preview-dot:nth-child(2) { background: #febc2e; }
+.preview-dot:nth-child(3) { background: #28c840; }
+
+.preview-content {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.preview-stat {
+  background: rgba(255,255,255,0.5);
+  border-radius: 12px; padding: 1.2rem;
+}
+
+.preview-stat-label {
+  font-size: 0.75rem; color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.preview-stat-value {
+  font-family: 'Fraunces', serif;
+  font-size: 1.8rem; font-weight: 600;
+}
+
+.preview-stat-change {
+  font-size: 0.75rem; margin-top: 0.3rem;
+}
+.preview-stat-change.up { color: var(--green); }
+.preview-stat-change.down { color: var(--accent); }
+
+.preview-chart-area {
+  grid-column: 1 / -1;
+  background: rgba(255,255,255,0.5);
+  border-radius: 12px; padding: 1.2rem;
+  height: 160px;
+  position: relative; overflow: hidden;
+}
+
+.mini-bars {
+  display: flex; align-items: flex-end;
+  gap: 4px; height: 100%;
+  padding-top: 2rem;
+}
+
+.mini-bar {
+  flex: 1; border-radius: 4px 4px 0 0;
+  animation: barGrow 1s ease forwards;
+  opacity: 0;
+}
+
+@keyframes barGrow {
+  from { transform: scaleY(0); opacity: 0; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+.mini-bar.a { background: var(--accent); }
+.mini-bar.b { background: rgba(232,69,14,0.25); }
+
+/* ===== FEATURES ===== */
+.features-section {
+  padding: 6rem 3rem;
+  max-width: 1100px; margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.8rem; color: var(--accent);
+  font-weight: 500; margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 2.5rem; font-weight: 700;
+  margin-bottom: 3rem; max-width: 500px;
+  line-height: 1.2;
+}
+
+.features-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.feat-card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.feat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+.feat-icon {
+  width: 48px; height: 48px;
+  background: var(--accent-light);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; margin-bottom: 1.2rem;
+}
+
+.feat-name {
+  font-weight: 600; font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.feat-desc {
+  font-size: 0.85rem; color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ===== PRICING ===== */
+.pricing-section {
+  padding: 6rem 3rem;
+  max-width: 1100px; margin: 0 auto;
+}
+
+.pricing-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.price-card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: transform 0.3s;
+  position: relative;
+}
+
+.price-card.pop {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: transparent;
+}
+
+.price-card.pop .price-label { color: rgba(255,255,255,0.5); }
+.price-card.pop .price-features li { color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.1); }
+.price-card.pop .price-features li::before { color: var(--accent); }
+
+.price-card:hover { transform: translateY(-4px); }
+
+.pop-badge {
+  position: absolute; top: -10px; right: 1.5rem;
+  background: var(--accent); color: white;
+  font-size: 0.7rem; font-weight: 600;
+  padding: 0.3rem 0.8rem; border-radius: 100px;
+}
+
+.price-label {
+  font-size: 0.8rem; color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.price-amount {
+  font-family: 'Fraunces', serif;
+  font-size: 2.2rem; font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.price-period {
+  font-size: 0.8rem; color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.price-features {
+  list-style: none; margin-bottom: 1.5rem;
+}
+
+.price-features li {
+  font-size: 0.8rem; color: var(--muted);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.price-features li::before { content: '✓ '; color: var(--green); font-weight: 700; }
+
+.price-btn {
+  width: 100%;
+  padding: 0.75rem; border-radius: 12px;
+  font-family: inherit; font-size: 0.85rem; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+}
+
+.price-btn-outline {
+  background: none; border: 1px solid var(--border);
+  color: var(--fg);
+}
+.price-btn-outline:hover { border-color: var(--fg); }
+
+.price-btn-fill {
+  background: var(--accent); border: none; color: white;
+}
+.price-btn-fill:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(232,69,14,0.3); }
+
+.price-btn-white {
+  background: white; border: none; color: var(--fg);
+}
+
+/* ===== DASHBOARD ===== */
+.dash-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+  padding-top: 5rem;
+  gap: 1rem;
+  padding-left: 1rem; padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+.dash-sidebar {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 0;
+  height: fit-content;
+  position: sticky; top: 5.5rem;
+}
+
+.dash-nav-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.65rem 1.5rem; cursor: pointer;
+  font-size: 0.85rem; color: var(--muted);
+  transition: all 0.2s;
+  border-radius: 0;
+}
+.dash-nav-item:hover { color: var(--fg); background: rgba(0,0,0,0.02); }
+.dash-nav-item.active {
+  color: var(--fg); font-weight: 500;
+  background: rgba(232,69,14,0.05);
+  border-right: 2px solid var(--accent);
+}
+
+.dash-nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+.dash-main { min-width: 0; }
+
+.dash-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 1.5rem;
+}
+
+.dash-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem; font-weight: 700;
+}
+
+.dash-sub { font-size: 0.85rem; color: var(--muted); }
+
+/* ===== UPLOAD ===== */
+.upload-card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 2px dashed rgba(0,0,0,0.1);
+  border-radius: var(--radius);
+  padding: 3rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.upload-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.upload-icon-circle {
+  width: 56px; height: 56px;
+  background: var(--accent-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin: 0 auto 1rem;
+}
+
+.upload-title { font-weight: 600; margin-bottom: 0.3rem; }
+.upload-hint { font-size: 0.8rem; color: var(--muted); }
+
+/* ===== FILE TABLE ===== */
+.files-card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.file-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 100px 100px 50px;
+  align-items: center;
+  padding: 0.9rem 1.5rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.file-row:last-child { border-bottom: none; }
+.file-row:hover { background: rgba(255,255,255,0.4); }
+.file-row.header { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+.file-row.header:hover { background: none; }
+
+.file-name-cell { font-weight: 500; }
+
+.file-status-pill {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.2rem 0.6rem; border-radius: 100px;
+  font-size: 0.75rem;
+}
+.file-status-pill.ready { background: rgba(26,138,74,0.1); color: var(--green); }
+.file-status-pill.processing { background: rgba(37,99,235,0.1); color: var(--blue); }
+.file-status-pill.error { background: rgba(232,69,14,0.1); color: var(--accent); }
+
+.file-del {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 1rem;
+  width: 30px; height: 30px; border-radius: 8px;
+  transition: all 0.2s;
+}
+.file-del:hover { background: rgba(232,69,14,0.1); color: var(--accent); }
+
+/* ===== ANALYSIS ===== */
+.analysis-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  min-height: 100vh;
+  padding-top: 5rem;
+  gap: 1rem;
+  padding: 5rem 1rem 1rem;
+}
+
+.analysis-content { min-width: 0; }
+
+.analysis-header-card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+.analysis-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.4rem; font-weight: 600;
+}
+
+.analysis-meta { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+
+.insights-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem; margin-bottom: 1rem;
+}
+
+.insight-glass {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: transform 0.3s;
+}
+.insight-glass:hover { transform: translateY(-2px); }
+
+.insight-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 0.75rem;
+}
+
+.insight-tag {
+  font-size: 0.7rem; font-weight: 600;
+  padding: 0.2rem 0.6rem; border-radius: 100px;
+}
+.insight-tag.trend { background: rgba(37,99,235,0.1); color: var(--blue); }
+.insight-tag.anomaly { background: rgba(232,69,14,0.1); color: var(--accent); }
+.insight-tag.correlation { background: rgba(26,138,74,0.1); color: var(--green); }
+.insight-tag.business { background: rgba(232,69,14,0.1); color: var(--accent); }
+
+.insight-sev {
+  font-size: 0.65rem; font-weight: 500;
+  padding: 0.15rem 0.5rem; border-radius: 100px;
+  border: 1px solid;
+}
+.insight-sev.warning { color: var(--accent); border-color: rgba(232,69,14,0.3); }
+.insight-sev.info { color: var(--blue); border-color: rgba(37,99,235,0.3); }
+
+.insight-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; }
+.insight-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+.chart-glass {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.chart-title {
+  font-size: 0.8rem; color: var(--muted);
+  font-weight: 500; margin-bottom: 1rem;
+}
+
+.chart-placeholder {
+  height: 220px; position: relative;
+}
+
+.chart-placeholder svg { width: 100%; height: 100%; }
+
+.line-main { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+.line-area { fill: url(#softGrad); }
+.line-secondary { fill: none; stroke: var(--blue); stroke-width: 1.5; stroke-dasharray: 6 3; opacity: 0.5; }
+
+/* ===== CHAT ===== */
+.chat-glass {
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex; flex-direction: column;
+  height: calc(100vh - 6rem);
+  position: sticky; top: 5.5rem;
+  overflow: hidden;
+}
+
+.chat-head {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600; font-size: 0.9rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+
+.chat-head-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+}
+
+.chat-body {
+  flex: 1; padding: 1.5rem;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 0.75rem;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 0.8rem 1rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  border-radius: 16px;
+}
+
+.chat-bubble.user {
+  background: var(--fg); color: var(--bg);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.ai {
+  background: rgba(255,255,255,0.7);
+  align-self: flex-start;
+  color: var(--fg);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-foot {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 0.5rem;
+}
+
+.chat-field {
+  flex: 1;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  font-family: inherit; font-size: 0.85rem;
+  outline: none; color: var(--fg);
+}
+.chat-field:focus { border-color: var(--accent); }
+
+.chat-btn {
+  background: var(--accent); color: white;
+  border: none; border-radius: 12px;
+  width: 42px; cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+.chat-btn:hover { transform: scale(1.05); }
+
+/* ===== SWITCHER ===== */
+.page-switcher {
+  position: fixed; bottom: 1.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 0.25rem;
+  background: var(--glass);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  padding: 4px;
+  border-radius: 100px; z-index: 200;
+  box-shadow: var(--shadow);
+}
+
+.page-switcher button {
+  background: none; border: none;
+  color: var(--muted); padding: 0.5rem 1.2rem;
+  cursor: pointer; font-family: inherit;
+  font-size: 0.8rem; font-weight: 500;
+  border-radius: 100px;
+  transition: all 0.2s;
+}
+.page-switcher button.active {
+  background: var(--fg); color: var(--bg);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Data<span>Lens</span></div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('landing')">Главная</a>
+    <a href="#" onclick="showPage('dashboard')">Дашборд</a>
+    <a href="#" onclick="showPage('analysis')">Анализ</a>
+  </div>
+  <button class="nav-cta" onclick="showPage('dashboard')">Начать →</button>
+</nav>
+
+<!-- LANDING -->
+<div id="landing" class="page active">
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      AI-аналитика для российского бизнеса
+    </div>
+    <h1 class="hero-title">Данные говорят.<br><em>Мы переводим.</em></h1>
+    <p class="hero-desc">Загрузите CSV или Excel — AI найдёт аномалии, тренды и выбросы. Для селлеров WB, Ozon и малого бизнеса.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showPage('dashboard')">Попробовать бесплатно</button>
+      <button class="btn-soft">Смотреть демо</button>
+    </div>
+    <div class="hero-preview">
+      <div class="preview-header">
+        <span class="preview-dot"></span>
+        <span class="preview-dot"></span>
+        <span class="preview-dot"></span>
+      </div>
+      <div class="preview-content">
+        <div class="preview-stat">
+          <div class="preview-stat-label">Выручка</div>
+          <div class="preview-stat-value">2.4M ₽</div>
+          <div class="preview-stat-change up">↑ 23.4%</div>
+        </div>
+        <div class="preview-stat">
+          <div class="preview-stat-label">Заказы</div>
+          <div class="preview-stat-value">1 847</div>
+          <div class="preview-stat-change up">↑ 12.1%</div>
+        </div>
+        <div class="preview-stat">
+          <div class="preview-stat-label">Возвраты</div>
+          <div class="preview-stat-value">8.3%</div>
+          <div class="preview-stat-change down">↑ 2.1%</div>
+        </div>
+        <div class="preview-chart-area">
+          <div class="mini-bars">
+            <div class="mini-bar a" style="height:35%;animation-delay:0.1s"></div>
+            <div class="mini-bar b" style="height:12%;animation-delay:0.12s"></div>
+            <div class="mini-bar a" style="height:55%;animation-delay:0.14s"></div>
+            <div class="mini-bar b" style="height:18%;animation-delay:0.16s"></div>
+            <div class="mini-bar a" style="height:42%;animation-delay:0.18s"></div>
+            <div class="mini-bar b" style="height:8%;animation-delay:0.2s"></div>
+            <div class="mini-bar a" style="height:68%;animation-delay:0.22s"></div>
+            <div class="mini-bar b" style="height:22%;animation-delay:0.24s"></div>
+            <div class="mini-bar a" style="height:50%;animation-delay:0.26s"></div>
+            <div class="mini-bar b" style="height:15%;animation-delay:0.28s"></div>
+            <div class="mini-bar a" style="height:75%;animation-delay:0.3s"></div>
+            <div class="mini-bar b" style="height:20%;animation-delay:0.32s"></div>
+            <div class="mini-bar a" style="height:60%;animation-delay:0.34s"></div>
+            <div class="mini-bar b" style="height:10%;animation-delay:0.36s"></div>
+            <div class="mini-bar a" style="height:85%;animation-delay:0.38s"></div>
+            <div class="mini-bar b" style="height:25%;animation-delay:0.4s"></div>
+            <div class="mini-bar a" style="height:70%;animation-delay:0.42s"></div>
+            <div class="mini-bar b" style="height:14%;animation-delay:0.44s"></div>
+            <div class="mini-bar a" style="height:90%;animation-delay:0.46s"></div>
+            <div class="mini-bar b" style="height:28%;animation-delay:0.48s"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <div class="section-label">Возможности</div>
+    <h2 class="section-title">Всё для анализа данных вашего бизнеса</h2>
+    <div class="features-cards">
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <div class="feat-name">Умный парсинг</div>
+        <div class="feat-desc">CSV, Excel, любая кодировка. Определяем cp1251, разделители, типы данных автоматически.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🏪</div>
+        <div class="feat-name">WB / Ozon / 1С</div>
+        <div class="feat-desc">Распознаём формат выгрузки и даём специализированные рекомендации по вашей нише.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🤖</div>
+        <div class="feat-name">AI-чат</div>
+        <div class="feat-desc">Задавайте вопросы по данным на русском языке. Мгновенные ответы с графиками.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📈</div>
+        <div class="feat-name">Автографики</div>
+        <div class="feat-desc">Интерактивные визуализации генерируются автоматически на основе найденных паттернов.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-name">Аномалии и тренды</div>
+        <div class="feat-desc">Z-score, IQR, линейная регрессия, корреляции Пирсона — всё автоматически.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔒</div>
+        <div class="feat-name">Безопасность</div>
+        <div class="feat-desc">Данные зашифрованы, хранятся в российских дата-центрах. Полный контроль доступа.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-section">
+    <div class="section-label">Тарифы</div>
+    <h2 class="section-title">Выберите план</h2>
+    <div class="pricing-cards">
+      <div class="price-card">
+        <div class="price-label">Free</div>
+        <div class="price-amount">0 ₽</div>
+        <div class="price-period">навсегда</div>
+        <ul class="price-features">
+          <li>5 файлов/мес</li>
+          <li>5 MB максимум</li>
+          <li>10 сообщений/день</li>
+          <li>3 анализа/мес</li>
+        </ul>
+        <button class="price-btn price-btn-outline">Начать</button>
+      </div>
+      <div class="price-card">
+        <div class="price-label">Starter</div>
+        <div class="price-amount">990 ₽</div>
+        <div class="price-period">в месяц</div>
+        <ul class="price-features">
+          <li>30 файлов/мес</li>
+          <li>20 MB максимум</li>
+          <li>50 сообщений/день</li>
+          <li>15 анализов/мес</li>
+        </ul>
+        <button class="price-btn price-btn-outline">Выбрать</button>
+      </div>
+      <div class="price-card pop">
+        <div class="pop-badge">Популярный</div>
+        <div class="price-label">Business</div>
+        <div class="price-amount">3 990 ₽</div>
+        <div class="price-period">в месяц</div>
+        <ul class="price-features">
+          <li>∞ файлов</li>
+          <li>50 MB максимум</li>
+          <li>∞ сообщений</li>
+          <li>∞ анализов</li>
+        </ul>
+        <button class="price-btn price-btn-white">Выбрать</button>
+      </div>
+      <div class="price-card">
+        <div class="price-label">Pro</div>
+        <div class="price-amount">9 990 ₽</div>
+        <div class="price-period">в месяц</div>
+        <ul class="price-features">
+          <li>∞ файлов</li>
+          <li>100 MB максимум</li>
+          <li>API доступ</li>
+          <li>∞ анализов</li>
+        </ul>
+        <button class="price-btn price-btn-outline">Выбрать</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="page">
+  <div class="dash-layout">
+    <aside class="dash-sidebar">
+      <div class="dash-nav-item active"><span class="dash-nav-icon">◫</span> Файлы</div>
+      <div class="dash-nav-item"><span class="dash-nav-icon">◈</span> Анализы</div>
+      <div class="dash-nav-item"><span class="dash-nav-icon">⊡</span> Тарифы</div>
+      <div class="dash-nav-item"><span class="dash-nav-icon">⚙</span> Настройки</div>
+    </aside>
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">Мои файлы</div>
+          <div class="dash-sub">Загрузите данные для анализа</div>
+        </div>
+        <button class="btn-primary">+ Загрузить</button>
+      </div>
+
+      <div class="upload-card">
+        <div class="upload-icon-circle">⬆</div>
+        <div class="upload-title">Перетащите файл сюда</div>
+        <div class="upload-hint">CSV, TSV, Excel — до 50 MB</div>
+      </div>
+
+      <div class="files-card">
+        <div class="file-row header">
+          <span>Файл</span><span>Размер</span><span>Статус</span><span>Дата</span><span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name-cell">wb_sales_jan.xlsx</span>
+          <span>2.4 MB</span>
+          <span><span class="file-status-pill ready">● Готов</span></span>
+          <span>12.01</span>
+          <button class="file-del">×</button>
+        </div>
+        <div class="file-row">
+          <span class="file-name-cell">ozon_returns.csv</span>
+          <span>890 KB</span>
+          <span><span class="file-status-pill processing">◌ Обработка</span></span>
+          <span>12.01</span>
+          <button class="file-del">×</button>
+        </div>
+        <div class="file-row">
+          <span class="file-name-cell">1c_report_q4.xlsx</span>
+          <span>5.1 MB</span>
+          <span><span class="file-status-pill ready">● Готов</span></span>
+          <span>10.01</span>
+          <button class="file-del">×</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ANALYSIS -->
+<div id="analysis" class="page">
+  <div class="analysis-layout">
+    <div class="analysis-content">
+      <div class="analysis-header-card">
+        <div>
+          <div class="analysis-title">wb_sales_jan_2025.xlsx</div>
+          <div class="analysis-meta">Wildberries · 12 450 строк · 18 колонок</div>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn-soft">Экспорт</button>
+          <button class="btn-primary">Новый анализ</button>
+        </div>
+      </div>
+
+      <div class="insights-row">
+        <div class="insight-glass">
+          <div class="insight-header">
+            <span class="insight-tag trend">Тренд</span>
+            <span class="insight-sev info">info</span>
+          </div>
+          <div class="insight-title">Рост выручки на 23% за квартал</div>
+          <div class="insight-desc">Линейная регрессия: R² = 0.87, наклон = 12 400₽/день</div>
+        </div>
+        <div class="insight-glass">
+          <div class="insight-header">
+            <span class="insight-tag anomaly">Аномалия</span>
+            <span class="insight-sev warning">warning</span>
+          </div>
+          <div class="insight-title">Резкий рост возвратов 15-17 января</div>
+          <div class="insight-desc">Z-score = 4.2, возвраты в 3x выше среднего</div>
+        </div>
+        <div class="insight-glass">
+          <div class="insight-header">
+            <span class="insight-tag correlation">Корреляция</span>
+            <span class="insight-sev info">info</span>
+          </div>
+          <div class="insight-title">Скидка ↔ Объём продаж</div>
+          <div class="insight-desc">Пирсон: 0.82. Больше скидка → больше продаж, но маржа падает</div>
+        </div>
+        <div class="insight-glass">
+          <div class="insight-header">
+            <span class="insight-tag business">Бизнес</span>
+            <span class="insight-sev warning">warning</span>
+          </div>
+          <div class="insight-title">5 SKU генерируют 60% убытков</div>
+          <div class="insight-desc">WB-4521, WB-4533, WB-4590 убыточны из-за логистики</div>
+        </div>
+      </div>
+
+      <div class="chart-glass">
+        <div class="chart-title">Выручка и возвраты по дням</div>
+        <div class="chart-placeholder">
+          <svg viewBox="0 0 700 200">
+            <defs>
+              <linearGradient id="softGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(232,69,14,0.15)" />
+                <stop offset="100%" stop-color="rgba(232,69,14,0)" />
+              </linearGradient>
+            </defs>
+            <path class="line-area" d="M0,180 50,140 100,150 150,110 200,120 250,80 300,90 350,60 400,70 450,40 500,50 550,30 600,25 650,20 700,15 700,200 0,200 Z" />
+            <path class="line-main" d="M0,180 50,140 100,150 150,110 200,120 250,80 300,90 350,60 400,70 450,40 500,50 550,30 600,25 650,20 700,15" />
+            <path class="line-secondary" d="M0,185 50,182 100,178 150,190 200,182 250,175 300,160 350,185 400,178 450,172 500,175 550,180 600,177 650,182 700,180" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-glass">
+      <div class="chat-head"><span class="chat-head-dot"></span> AI-чат по данным</div>
+      <div class="chat-body">
+        <div class="chat-bubble user">Какие товары самые убыточные?</div>
+        <div class="chat-bubble ai">По анализу данных, 5 артикулов генерируют наибольшие убытки:
+
+1. WB-4521 — убыток 45 200₽, возврат 38%
+2. WB-4533 — убыток 32 100₽
+3. WB-4590 — убыток 28 700₽
+
+Рекомендация: пересмотреть ценообразование или вывести из ассортимента.</div>
+        <div class="chat-bubble user">Покажи тренд по неделям</div>
+        <div class="chat-bubble ai">Выручка по неделям показывает устойчивый рост. Последняя неделя — максимум: 842 000₽, что на 15% выше предыдущей.</div>
+      </div>
+      <div class="chat-foot">
+        <input class="chat-field" placeholder="Задайте вопрос..." />
+        <button class="chat-btn">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-switcher">
+  <button class="active" onclick="showPage('landing')">Лендинг</button>
+  <button onclick="showPage('dashboard')">Дашборд</button>
+  <button onclick="showPage('analysis')">Анализ</button>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.page-switcher button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

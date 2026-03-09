@@ -1,0 +1,48 @@
+import type { FileResponse } from '$lib/types/api';
+
+export const mockFiles: FileResponse[] = [
+	{
+		id: 'f1a2b3c4-d5e6-7890-abcd-ef1234567890',
+		original_name: 'wb_sales_jan.xlsx',
+		mime_type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		size_bytes: 2516582,
+		status: 'ready',
+		row_count: 12450,
+		column_count: 18,
+		domain: 'wildberries',
+		created_at: '2025-01-12T10:30:00Z',
+	},
+	{
+		id: 'a1b2c3d4-e5f6-7890-abcd-123456789abc',
+		original_name: 'ozon_returns.csv',
+		mime_type: 'text/csv',
+		size_bytes: 911360,
+		status: 'processing',
+		row_count: null,
+		column_count: null,
+		domain: null,
+		created_at: '2025-01-12T11:15:00Z',
+	},
+	{
+		id: 'b2c3d4e5-f6a7-8901-bcde-23456789abcd',
+		original_name: '1c_report_q4.xlsx',
+		mime_type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		size_bytes: 5347737,
+		status: 'ready',
+		row_count: 8340,
+		column_count: 24,
+		domain: '1c',
+		created_at: '2025-01-10T14:20:00Z',
+	},
+	{
+		id: 'c3d4e5f6-a7b8-9012-cdef-3456789abcde',
+		original_name: 'ads_campaign_feb.csv',
+		mime_type: 'text/csv',
+		size_bytes: 245760,
+		status: 'error',
+		row_count: null,
+		column_count: null,
+		domain: null,
+		created_at: '2025-01-11T09:45:00Z',
+	},
+];

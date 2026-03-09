@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Концепт 14: Retro Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050505;
+  --fg: #00ff00; /* green phosphor */
+  --dim: #004400;
+  --highlight: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Fira Code', monospace;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+body::after {
+  content: "";
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
+  pointer-events: none; z-index: 9999;
+}
+
+::selection { background: var(--fg); color: var(--bg); }
+
+/* ===== ASCII BOXES ===== */
+.box { border: 1px solid var(--fg); position: relative; padding: 20px; background: rgba(0,255,0,0.02); margin-bottom: 20px; }
+.box-title { position: absolute; top: -10px; left: 15px; background: var(--bg); padding: 0 10px; font-weight: 700; }
+
+/* ===== NAV ===== */
+nav { display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 1.2rem; }
+.logo { font-weight: 700; color: var(--highlight); }
+.nav-links a { color: var(--fg); text-decoration: none; margin-left: 20px; }
+.nav-links a:hover { background: var(--fg); color: var(--bg); }
+
+/* ===== PAGE SECTIONS ===== */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===== LANDING ===== */
+.hero { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; text-align: center; }
+.hero-title { font-size: 3rem; white-space: pre; line-height: 1.2; margin-bottom: 30px; }
+.hero-desc { font-size: 1.2rem; max-width: 600px; line-height: 1.5; margin-bottom: 40px; }
+.btn {
+  background: transparent; color: var(--fg); border: 1px solid var(--fg);
+  padding: 10px 20px; font-family: inherit; font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+}
+.btn:hover { background: var(--fg); color: var(--bg); }
+
+/* ===== DASHBOARD ===== */
+.dashboard { display: grid; grid-template-columns: 250px 1fr; gap: 20px; }
+.menu-list { list-style: none; }
+.menu-list li { margin-bottom: 10px; cursor: pointer; }
+.menu-list li::before { content: "> "; color: var(--dim); }
+.menu-list li:hover, .menu-list li.active { color: var(--highlight); }
+.menu-list li.active::before { content: ">> "; color: var(--highlight); }
+
+.upload-area { text-align: center; padding: 40px; border: 1px dashed var(--fg); cursor: pointer; margin-bottom: 20px; }
+.upload-area:hover { background: var(--fg); color: var(--bg); }
+
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { text-align: left; padding: 10px; border-bottom: 1px dotted var(--dim); }
+.table th { color: var(--highlight); border-bottom: 1px solid var(--fg); }
+
+/* ===== ANALYSIS ===== */
+.analysis-layout { display: grid; grid-template-columns: 1fr 400px; gap: 20px; }
+
+.insight { margin-bottom: 15px; }
+.insight-type { display: inline-block; background: var(--fg); color: var(--bg); padding: 0 5px; margin-right: 10px; font-size: 0.9rem; }
+.insight-type.warn { background: #ff0000; color: #fff; }
+
+.chart-ascii { font-size: 0.9rem; line-height: 1.2; white-space: pre; color: var(--highlight); margin: 20px 0; }
+
+.chat-panel { display: flex; flex-direction: column; height: calc(100vh - 150px); }
+.chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+.msg-row { display: flex; gap: 10px; }
+.msg-prompt { color: var(--dim); min-width: 50px; }
+.msg-text { flex: 1; }
+.msg.user .msg-text { color: var(--highlight); }
+
+.chat-input-row { display: flex; gap: 10px; align-items: center; border-top: 1px solid var(--fg); padding-top: 15px; }
+.chat-input { flex: 1; background: transparent; border: none; color: var(--fg); font-family: inherit; font-size: 1rem; outline: none; }
+.cursor { width: 10px; height: 1.2em; background: var(--fg); animation: blink 1s step-end infinite; }
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ===== SWITCHER ===== */
+.page-switcher { position: fixed; bottom: 20px; left: 20px; display: flex; gap: 10px; z-index: 100; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">DATALENS.exe v1.0</div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('landing')">[HOME]</a>
+    <a href="#" onclick="showPage('dashboard')">[SYS_FILES]</a>
+    <a href="#" onclick="showPage('analysis')">[AI_CORE]</a>
+  </div>
+</nav>
+
+<div id="landing" class="page active">
+  <div class="hero">
+    <div class="hero-title">
+  ___       _        _                   
+ |   \ __ _| |_ __ _| |   ___ _ _  ___ 
+ | |) / _` |  _/ _` | |__/ -_) ' \(_-< 
+ |___/\__,_|\__\__,_|____\___|_||_/__/ 
+    </div>
+    <div class="hero-desc">
+      AI-АНАЛИТИКА ДЛЯ БИЗНЕСА.<br>
+      ЗАГРУЗИТЕ ДАННЫЕ ИЗ 1С ИЛИ МАРКЕТПЛЕЙСОВ.<br>
+      ПОЛУЧИТЕ ОТВЕТЫ ЗА 30 СЕКУНД.
+    </div>
+    <button class="btn" onclick="showPage('dashboard')">EXECUTE START.BAT</button>
+  </div>
+</div>
+
+<div id="dashboard" class="page">
+  <div class="dashboard">
+    <div class="box">
+      <div class="box-title">MENU</div>
+      <ul class="menu-list">
+        <li class="active">UPLOAD_DATA</li>
+        <li>LOCAL_STORAGE</li>
+        <li>SETTINGS.INI</li>
+      </ul>
+    </div>
+    <div class="box">
+      <div class="box-title">WORKSPACE</div>
+      <div class="upload-area">
+        [ DRAG AND DROP CSV/XLSX FILES HERE ]
+      </div>
+      <table class="table">
+        <tr><th>FILE_NAME</th><th>SIZE</th><th>STATUS</th></tr>
+        <tr><td>WB_SALES_Q1.CSV</td><td>2.4MB</td><td>[PARSED]</td></tr>
+        <tr><td>1C_EXPORT.XLSX</td><td>12.1MB</td><td>[WAITING]</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="analysis" class="page">
+  <div class="analysis-layout">
+    <div class="box">
+      <div class="box-title">ANALYTICS_OUTPUT</div>
+      
+      <div style="margin-bottom: 30px;">
+        <div class="insight">
+          <span class="insight-type">INFO</span>
+          <span>Выручка выросла на 15% (Тренд: +)</span>
+        </div>
+        <div class="insight">
+          <span class="insight-type warn">WARN</span>
+          <span>Найдено 3 убыточных артикула из-за логистики</span>
+        </div>
+      </div>
+
+      <div style="color: var(--dim);">[ REVENUE CHART RENDER ]</div>
+      <div class="chart-ascii">
+200K |         *  *
+150K |      *        *  *
+100K |   *                 *
+ 50K |*
+     +-----------------------
+      J   F   M   A   M   J
+      </div>
+    </div>
+    
+    <div class="box chat-panel">
+      <div class="box-title">AI_TERMINAL</div>
+      <div class="chat-messages">
+        <div class="msg-row">
+          <div class="msg-prompt">SYS></div>
+          <div class="msg-text">Data loaded. 4500 rows indexed. Awaiting query...</div>
+        </div>
+        <div class="msg-row user">
+          <div class="msg-prompt">USR></div>
+          <div class="msg-text">Какие товары самые прибыльные?</div>
+        </div>
+        <div class="msg-row">
+          <div class="msg-prompt">SYS></div>
+          <div class="msg-text">
+            TOP 3 SKU:<br>
+            1. Арт 101 - Маржа 45%<br>
+            2. Арт 205 - Маржа 38%<br>
+            3. Арт 304 - Маржа 32%
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <div class="msg-prompt">USR></div>
+        <input class="chat-input" value="Покажи статистику возвратов" />
+        <div class="cursor"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-switcher">
+  <button class="btn" onclick="showPage('landing')">1</button>
+  <button class="btn" onclick="showPage('dashboard')">2</button>
+  <button class="btn" onclick="showPage('analysis')">3</button>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>

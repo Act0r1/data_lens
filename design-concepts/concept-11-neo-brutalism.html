@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Bauhaus Grid</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f4f4;
+  --fg: #111;
+  --panel: #fff;
+  --red: #e32636;
+  --blue: #0033a0;
+  --yellow: #fbd816;
+  --border: 3px solid #111;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.5;
+  overflow-x: hidden;
+  padding: 2rem;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  border: var(--border);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAV */
+nav {
+  display: flex;
+  border-bottom: var(--border);
+}
+.logo {
+  font-size: 1.5rem; font-weight: 800; text-transform: uppercase;
+  padding: 1.5rem 2rem; border-right: var(--border);
+  background: var(--blue); color: #fff;
+}
+.nav-links {
+  display: flex; flex: 1;
+}
+.nav-links a {
+  padding: 1.5rem 2rem; border-right: var(--border);
+  color: var(--fg); text-decoration: none; font-weight: 600; font-size: 1rem;
+  transition: background 0.2s; text-transform: uppercase;
+}
+.nav-links a:hover { background: var(--yellow); }
+.nav-cta {
+  padding: 1.5rem 2rem; border: none; background: var(--red); color: #fff;
+  font-family: inherit; font-size: 1rem; font-weight: 800; text-transform: uppercase;
+  cursor: pointer; transition: filter 0.2s;
+}
+.nav-cta:hover { filter: brightness(0.9); }
+
+/* HERO */
+.hero {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  border-bottom: var(--border);
+}
+
+.hero-content {
+  padding: 4rem;
+  border-right: var(--border);
+}
+
+.hero-tag {
+  display: inline-block; padding: 0.5rem 1rem; background: var(--yellow);
+  border: var(--border); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.hero-h1 {
+  font-size: 5rem; font-weight: 800; line-height: 1; text-transform: uppercase;
+  margin-bottom: 2rem; letter-spacing: -2px;
+}
+
+.hero-desc {
+  font-size: 1.2rem; font-weight: 400; max-width: 500px; margin-bottom: 3rem;
+}
+
+.btn-primary {
+  background: var(--fg); color: #fff; padding: 1rem 3rem; border: var(--border);
+  font-family: inherit; font-size: 1.2rem; font-weight: 800; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-primary:hover { background: var(--blue); border-color: var(--blue); }
+
+.hero-visual {
+  display: flex; flex-direction: column;
+}
+
+.visual-top {
+  flex: 1; border-bottom: var(--border);
+  background: repeating-linear-gradient(45deg, var(--bg), var(--bg) 10px, var(--panel) 10px, var(--panel) 20px);
+  display: flex; align-items: center; justify-content: center; padding: 2rem;
+}
+
+.visual-mockup {
+  background: var(--panel); border: var(--border); padding: 1.5rem; width: 100%;
+}
+.mock-bar { height: 20px; border: var(--border); margin-bottom: 10px; }
+.mock-bar.a { width: 40%; background: var(--red); }
+.mock-bar.b { width: 70%; background: var(--yellow); }
+.mock-bar.c { width: 90%; background: var(--blue); }
+
+.visual-bottom {
+  display: grid; grid-template-columns: 1fr 1fr;
+  height: 150px;
+}
+.vb-left { border-right: var(--border); background: var(--red); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 3rem; font-weight: 800; }
+.vb-right { background: var(--yellow); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; padding: 1rem; text-align: center;}
+
+/* FEATURES */
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: var(--border);
+}
+
+.feat-col {
+  border-right: var(--border); padding: 3rem;
+}
+.feat-col:last-child { border-right: none; }
+
+.feat-num {
+  font-size: 3rem; font-weight: 800; color: var(--blue); margin-bottom: 1rem;
+}
+.feat-title {
+  font-size: 1.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 1rem;
+}
+.feat-desc {
+  font-size: 1rem;
+}
+
+/* PRICING */
+.pricing {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+}
+
+.pricing-header {
+  padding: 4rem; border-right: var(--border); background: var(--bg);
+}
+.pricing-title {
+  font-size: 4rem; font-weight: 800; text-transform: uppercase; line-height: 1;
+}
+
+.pricing-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+
+.price-card {
+  padding: 3rem; border-right: var(--border); border-bottom: var(--border);
+  display: flex; flex-direction: column;
+}
+.price-card:nth-child(2n) { border-right: none; }
+.price-card:nth-child(3), .price-card:nth-child(4) { border-bottom: none; }
+.price-card.pro { background: var(--blue); color: #fff; }
+.price-card.pro .price-btn { background: var(--yellow); color: var(--fg); border-color: var(--yellow); }
+
+.price-name { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem; }
+.price-cost { font-size: 3rem; font-weight: 800; margin-bottom: 1.5rem; }
+.price-list { list-style: none; margin-bottom: 2rem; flex: 1; }
+.price-list li { margin-bottom: 0.5rem; font-weight: 600; padding-left: 1.5rem; position: relative; }
+.price-list li::before { content: '■'; position: absolute; left: 0; color: var(--red); }
+.price-card.pro .price-list li::before { color: var(--yellow); }
+
+.price-btn {
+  background: var(--panel); border: var(--border); color: var(--fg);
+  padding: 1rem; font-family: inherit; font-size: 1rem; font-weight: 800; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+}
+.price-btn:hover { background: var(--fg); color: #fff; }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <nav>
+    <div class="logo">DataLens</div>
+    <div class="nav-links">
+      <a href="#">Обзор</a>
+      <a href="#">Возможности</a>
+      <a href="#">Тарифы</a>
+    </div>
+    <button class="nav-cta">Войти</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-tag">AI-Аналитик</div>
+      <h1 class="hero-h1">Порядок<br>в данных</h1>
+      <p class="hero-desc">Загрузите файлы из Wildberries, Ozon или 1С. Получите строгие, точные и автоматические бизнес-отчеты без лишних таблиц и формул.</p>
+      <button class="btn-primary">Начать анализ</button>
+    </div>
+    <div class="hero-visual">
+      <div class="visual-top">
+        <div class="visual-mockup">
+          <div style="font-weight: 800; text-transform: uppercase; margin-bottom: 1rem;">Отчет по марже</div>
+          <div class="mock-bar a"></div>
+          <div class="mock-bar b"></div>
+          <div class="mock-bar c"></div>
+        </div>
+      </div>
+      <div class="visual-bottom">
+        <div class="vb-left">+24%</div>
+        <div class="vb-right">Рост выручки за март</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feat-col">
+      <div class="feat-num">01</div>
+      <div class="feat-title">Умный парсинг</div>
+      <div class="feat-desc">Система автоматически очищает и структурирует сырые CSV и Excel файлы любого формата.</div>
+    </div>
+    <div class="feat-col">
+      <div class="feat-num">02</div>
+      <div class="feat-title">Отраслевая база</div>
+      <div class="feat-desc">Алгоритм обучен на специфике отчетов Ozon, Wildberries и конфигурациях 1С.</div>
+    </div>
+    <div class="feat-col">
+      <div class="feat-num">03</div>
+      <div class="feat-title">AI-Консультант</div>
+      <div class="feat-desc">Задавайте вопросы на русском языке и получайте готовые выводы по вашим финансам.</div>
+    </div>
+  </section>
+
+  <section class="pricing">
+    <div class="pricing-header">
+      <h2 class="pricing-title">Прайс<br>Лист</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Бесплатно</div>
+        <div class="price-cost">0 ₽</div>
+        <ul class="price-list">
+          <li>5 файлов в месяц</li>
+          <li>Объем до 5 МБ</li>
+          <li>Чат с ИИ</li>
+        </ul>
+        <button class="price-btn">Начать</button>
+      </div>
+      <div class="price-card pro">
+        <div class="price-name">Бизнес</div>
+        <div class="price-cost">3 990 ₽</div>
+        <ul class="price-list">
+          <li>Безлимит файлов</li>
+          <li>Объем до 50 МБ</li>
+          <li>Поиск скрытых убытков</li>
+        </ul>
+        <button class="price-btn">Выбрать</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

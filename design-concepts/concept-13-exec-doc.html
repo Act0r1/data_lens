@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Концепт 13: Notion-style Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --text: #37352f;
+  --text-light: #9b9a97;
+  --hover: #efefe9;
+  --accent: #eb5757;
+  --bg-block: #f7f6f3;
+  --border: #e9e9e7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: 250px; background: #fbfbfa; border-right: 1px solid var(--border);
+  padding: 1rem 0; font-size: 0.9rem;
+}
+
+.workspace-title {
+  padding: 0 1rem 1rem; font-weight: 500; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.menu-item {
+  padding: 6px 1rem; display: flex; align-items: center; gap: 10px; cursor: pointer;
+  color: var(--text);
+}
+.menu-item:hover { background: var(--hover); }
+.menu-item.active { background: var(--hover); font-weight: 500; }
+
+.section-label {
+  padding: 1.5rem 1rem 0.5rem; font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* Editor Container */
+.editor-container {
+  margin-left: 250px;
+  min-height: 100vh;
+  padding: 4rem 10% 10rem;
+  max-width: 900px;
+}
+
+.cover-image {
+  height: 15vh; background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+  margin: -4rem -12% 3rem;
+  position: relative;
+}
+.icon {
+  font-size: 4rem; position: absolute; bottom: -2rem; left: 10%;
+  background: white; border-radius: 8px; padding: 4px;
+}
+
+/* Typography */
+h1 { font-family: 'Spectral', serif; font-size: 3rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: -1px; }
+h2 { font-size: 1.5rem; font-weight: 600; margin: 2rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+p { margin-bottom: 1rem; font-size: 1.05rem; }
+
+.meta-row {
+  display: flex; gap: 2rem; margin-bottom: 2rem; font-size: 0.9rem; color: var(--text-light);
+}
+
+/* AI Block */
+.ai-block {
+  background: var(--bg-block);
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.ai-badge {
+  position: absolute; top: -10px; left: 1.5rem;
+  background: #6b21a8; color: white; font-size: 0.7rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
+  display: flex; align-items: center; gap: 4px;
+}
+
+.data-table {
+  width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem;
+}
+.data-table th, .data-table td {
+  border: 1px solid var(--border); padding: 8px 12px; text-align: left;
+}
+.data-table th { background: #f0f0f0; font-weight: 500; }
+.negative { color: var(--accent); }
+
+/* Command Menu Hint */
+.command-hint {
+  color: var(--text-light);
+  font-style: italic;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.slash {
+  background: var(--hover); padding: 2px 6px; border-radius: 4px; font-weight: 500; font-style: normal;
+}
+
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="workspace-title">
+    <span style="background: black; color: white; padding: 2px 6px; border-radius: 4px;">D</span> DataLens
+  </div>
+  <div class="section-label">Отчеты</div>
+  <div class="menu-item active">📊 Анализ продаж за Март</div>
+  <div class="menu-item">📉 Выгрузка 1С: Q1 2025</div>
+  <div class="menu-item">🎯 Рекламные кампании VK</div>
+  
+  <div class="section-label">Источники</div>
+  <div class="menu-item">📁 Загрузить файл...</div>
+</aside>
+
+<main class="editor-container">
+  <div class="cover-image">
+    <div class="icon">📊</div>
+  </div>
+
+  <h1>Анализ продаж за Март</h1>
+  
+  <div class="meta-row">
+    <div><strong>Источник:</strong> WB_Sales_March_2025.csv</div>
+    <div><strong>Строк:</strong> 14,204</div>
+    <div><strong>Сгенерировано:</strong> ИИ-Аналитик</div>
+  </div>
+
+  <p>Этот документ был автоматически сгенерирован на основе загруженного файла. Вы можете редактировать текст, добавлять свои комментарии и делиться ссылкой с коллегами.</p>
+
+  <h2>Исполнительное резюме</h2>
+  
+  <div class="ai-block">
+    <div class="ai-badge">✨ AI Инсайт</div>
+    <p>Общая выручка за март составила <strong>14.2 млн ₽</strong>, что на 12% больше по сравнению с февралем. Однако чистая прибыль снизилась на 4% из-за аномального роста стоимости логистики и процента возвратов в категории одежды.</p>
+  </div>
+
+  <h2>Проблемные зоны (Убытки)</h2>
+  <p>Алгоритм выявил 3 артикула, которые генерируют чистый убыток после вычета комиссии маркетплейса и логистики:</p>
+
+  <table class="data-table">
+    <tr>
+      <th>Артикул</th>
+      <th>Категория</th>
+      <th>Выручка, ₽</th>
+      <th>Логистика, ₽</th>
+      <th>Прибыль, ₽</th>
+    </tr>
+    <tr>
+      <td>WB-1029</td>
+      <td>Верхняя одежда</td>
+      <td>450,000</td>
+      <td>512,000</td>
+      <td class="negative">-62,000</td>
+    </tr>
+    <tr>
+      <td>WB-4421</td>
+      <td>Обувь</td>
+      <td>890,000</td>
+      <td>904,000</td>
+      <td class="negative">-14,000</td>
+    </tr>
+    <tr>
+      <td>WB-1102</td>
+      <td>Аксессуары</td>
+      <td>120,000</td>
+      <td>125,000</td>
+      <td class="negative">-5,000</td>
+    </tr>
+  </table>
+
+  <p>Рекомендуется временно скрыть эти товары из выдачи или пересмотреть ценообразование, заложив возросший процент брака (возвратов) в розничную цену.</p>
+
+  <h2>Пользовательские запросы</h2>
+  
+  <div class="command-hint">
+    Нажмите <span class="slash">/</span> для добавления ИИ-графика, новой таблицы или запроса к данным...
+  </div>
+  
+  <br><br><br>
+</main>
+
+</body>
+</html>

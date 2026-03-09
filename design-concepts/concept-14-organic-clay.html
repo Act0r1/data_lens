@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Organic Clay</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fdfaf6;
+  --fg: #4a4a4a;
+  --accent: #ff8b7b;
+  --card-bg: #ffffff;
+  --shadow-light: inset -5px -5px 15px rgba(255,255,255,0.8), inset 5px 5px 15px rgba(0,0,0,0.05);
+  --shadow-drop: 10px 10px 30px rgba(0,0,0,0.05), -10px -10px 30px #ffffff;
+  --radius: 30px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--fg);
+  min-height: 100vh; overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.5rem 3rem;
+}
+.logo { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+.nav-links { display: flex; gap: 2rem; background: var(--card-bg); padding: 0.8rem 2rem; border-radius: 50px; box-shadow: var(--shadow-drop); }
+.nav-links a { color: var(--fg); text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.3s; }
+.nav-links a:hover { color: var(--accent); }
+.nav-cta {
+  background: var(--accent); color: #fff; border: none; padding: 0.8rem 2rem; font-family: inherit; font-size: 1rem; font-weight: 800; cursor: pointer; border-radius: 50px; box-shadow: 0 5px 15px rgba(255,139,123,0.3); transition: transform 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); }
+
+/* PAGES */
+.page { display: none; padding-bottom: 100px; }
+.page.active { display: block; }
+
+/* HERO */
+.hero { text-align: center; padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+.hero-h1 { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; color: #2d2d2d; }
+.hero-desc { font-size: 1.2rem; color: #7a7a7a; margin-bottom: 3rem; padding: 0 2rem; line-height: 1.6; }
+.btn-primary { background: var(--accent); color: #fff; border: none; padding: 1.2rem 3rem; font-family: inherit; font-size: 1.2rem; font-weight: 800; border-radius: 50px; cursor: pointer; box-shadow: 0 8px 20px rgba(255,139,123,0.3); transition: transform 0.2s; }
+.btn-primary:hover { transform: translateY(-3px); }
+
+.mockup { margin-top: 4rem; background: var(--card-bg); border-radius: 40px; padding: 3rem; box-shadow: var(--shadow-drop); position: relative; }
+.mockup::after { content: ''; position: absolute; width: 150px; height: 150px; background: #b1e5d9; border-radius: 50%; top: -50px; right: -50px; z-index: -1; filter: blur(20px); }
+.mock-blob { background: var(--bg); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-light); margin-bottom: 2rem; display: flex; gap: 1rem; align-items: center; }
+.mock-icon { width: 50px; height: 50px; background: #ffeae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--accent); }
+.mock-bars { display: flex; align-items: flex-end; gap: 15px; height: 150px; justify-content: center; }
+.mock-bar { width: 40px; background: #e0e0e0; border-radius: 20px; box-shadow: var(--shadow-light); }
+.mock-bar.active { background: var(--accent); }
+
+/* FEATURES */
+.features { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+.sec-title { text-align: center; font-size: 2.5rem; font-weight: 800; color: #2d2d2d; margin-bottom: 4rem; }
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+.feat-card { background: var(--card-bg); border-radius: var(--radius); padding: 2.5rem; box-shadow: var(--shadow-drop); text-align: center; transition: transform 0.3s; }
+.feat-card:hover { transform: translateY(-5px); }
+.feat-icon { width: 70px; height: 70px; margin: 0 auto 1.5rem; background: var(--bg); border-radius: 50%; box-shadow: var(--shadow-light); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+.feat-title { font-size: 1.2rem; font-weight: 800; color: #2d2d2d; margin-bottom: 1rem; }
+
+/* PRICING */
+.pricing { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+.price-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+.price-card { background: var(--card-bg); border-radius: var(--radius); padding: 3rem 2rem; box-shadow: var(--shadow-drop); text-align: center; }
+.price-card.pro { transform: scale(1.05); border: 3px solid var(--accent); }
+.price-name { font-size: 1.2rem; font-weight: 800; color: #7a7a7a; margin-bottom: 1rem; }
+.price-cost { font-size: 3rem; font-weight: 800; color: #2d2d2d; margin-bottom: 2rem; }
+.price-list { list-style: none; margin-bottom: 2rem; text-align: left; }
+.price-list li { margin-bottom: 1rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.price-list li::before { content: '🌸'; font-size: 0.8rem; }
+.price-btn { width: 100%; background: var(--bg); color: var(--fg); border: none; padding: 1rem; border-radius: 50px; font-family: inherit; font-size: 1rem; font-weight: 800; cursor: pointer; box-shadow: var(--shadow-light); transition: all 0.2s; }
+.price-btn:hover { background: #fff; }
+.price-card.pro .price-btn { background: var(--accent); color: #fff; box-shadow: 0 5px 15px rgba(255,139,123,0.3); }
+
+/* SWITCHER */
+.switcher { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; background: var(--card-bg); padding: 0.5rem; border-radius: 50px; box-shadow: var(--shadow-drop); z-index: 100; }
+.switcher button { background: none; border: none; font-family: inherit; font-size: 1rem; font-weight: 800; color: #7a7a7a; padding: 0.8rem 1.5rem; border-radius: 50px; cursor: pointer; transition: all 0.3s; }
+.switcher button.active { background: var(--accent); color: #fff; }
+
+.placeholder-page { padding: 8rem; text-align: center; font-size: 2rem; font-weight: 800; color: #ccc; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">DataLens</div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('landing')">Главная</a>
+    <a href="#" onclick="showPage('dashboard')">Файлы</a>
+    <a href="#" onclick="showPage('analysis')">Анализ</a>
+  </div>
+  <button class="nav-cta">Войти</button>
+</nav>
+
+<div id="landing" class="page active">
+  <div class="hero">
+    <h1 class="hero-h1">Мягкий подход к твердым данным</h1>
+    <p class="hero-desc">Дружелюбный ИИ-аналитик для селлеров и малого бизнеса. Загрузите выгрузки из Wildberries, Ozon или 1С, и мы бережно найдем для вас инсайты, тренды и точки роста без зубодробительных формул.</p>
+    <button class="btn-primary" onclick="showPage('dashboard')">Попробовать бесплатно</button>
+    
+    <div class="mockup">
+      <div class="mock-blob">
+        <div class="mock-icon">✨</div>
+        <div style="text-align: left;">
+          <div style="font-weight: 800; color: #2d2d2d; margin-bottom: 5px;">ИИ-Помощник нашел инсайт:</div>
+          <div style="color: #7a7a7a; font-size: 0.9rem;">Продажи растут, но 5 товаров тянут маржу вниз из-за частых возвратов. Обратите внимание на колонку логистики.</div>
+        </div>
+      </div>
+      <div class="mock-bars">
+        <div class="mock-bar" style="height: 40%"></div>
+        <div class="mock-bar" style="height: 60%"></div>
+        <div class="mock-bar active" style="height: 90%"></div>
+        <div class="mock-bar" style="height: 50%"></div>
+        <div class="mock-bar" style="height: 70%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <h2 class="sec-title">Что мы умеем?</h2>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">📝</div><div class="feat-title">Понимаем любые таблицы</div><div class="feat-desc">Просто перетащите CSV или Excel. ИИ сам разберется с кривой кодировкой и форматами.</div></div>
+      <div class="feat-card"><div class="feat-icon">🛍️</div><div class="feat-title">Знаем специфику Ozon и WB</div><div class="feat-desc">Алгоритмы настроены на поиск проблем именно в товарном бизнесе и отчетах маркетплейсов.</div></div>
+      <div class="feat-card"><div class="feat-icon">💬</div><div class="feat-title">Общение по-человечески</div><div class="feat-desc">Спросите в чате: "Где мы теряем деньги?" — и получите понятный текстовый ответ.</div></div>
+      <div class="feat-card"><div class="feat-icon">🎯</div><div class="feat-title">Поиск аномалий</div><div class="feat-desc">Сами найдем всплески продаж, подозрительные возвраты и скрытые убытки.</div></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Красивые графики</div><div class="feat-desc">Данные автоматически превращаются в наглядные и приятные диаграммы.</div></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><div class="feat-title">Надежная защита</div><div class="feat-desc">Ваши коммерческие данные остаются приватными. Хранение по 152-ФЗ.</div></div>
+    </div>
+  </div>
+
+  <div class="pricing">
+    <h2 class="sec-title">Простые тарифы</h2>
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="price-name">Free</div>
+        <div class="price-cost">0 ₽</div>
+        <ul class="price-list">
+          <li>5 файлов в месяц</li>
+          <li>Объем до 5 МБ</li>
+          <li>Чат с ИИ</li>
+        </ul>
+        <button class="price-btn">Начать</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-cost">990 ₽</div>
+        <ul class="price-list">
+          <li>30 файлов в месяц</li>
+          <li>Объем до 20 МБ</li>
+          <li>Больше диаграмм</li>
+        </ul>
+        <button class="price-btn">Выбрать</button>
+      </div>
+      <div class="price-card pro">
+        <div class="price-name" style="color: var(--accent);">Business</div>
+        <div class="price-cost">3990 ₽</div>
+        <ul class="price-list">
+          <li>Безлимит файлов</li>
+          <li>Объем до 50 МБ</li>
+          <li>Глубокий поиск инсайтов</li>
+        </ul>
+        <button class="price-btn">Самый частый</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Pro</div>
+        <div class="price-cost">9990 ₽</div>
+        <ul class="price-list">
+          <li>Командный доступ</li>
+          <li>Объем до 100 МБ</li>
+          <li>API выгрузка</li>
+        </ul>
+        <button class="price-btn">Выбрать</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dashboard" class="page placeholder-page">Уютный Дашборд</div>
+<div id="analysis" class="page placeholder-page">Магия Аналитики</div>
+
+<div class="switcher">
+  <button class="active" onclick="showPage('landing')">Главная</button>
+  <button onclick="showPage('dashboard')">Файлы</button>
+  <button onclick="showPage('analysis')">Анализ</button>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.switcher button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

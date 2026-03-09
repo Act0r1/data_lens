@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLens — Концепт 14: Action Feed (Stories)</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #09090b; /* very dark gray */
+  --card-bg: #18181b;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --danger: #ef4444;
+  --success: #10b981;
+  --brand: #3b82f6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Эмуляция мобильного/сфокусированного интерфейса на десктопе */
+.app-container {
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  padding: 2rem 1.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; }
+.file-badge { background: #27272a; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+
+/* Progress bar (Stories style) */
+.progress-container {
+  display: flex; gap: 4px; padding: 0 1.5rem; margin-bottom: 1rem;
+}
+.progress-bar {
+  flex: 1; height: 3px; background: #3f3f46; border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--text); width: 0%; border-radius: 2px;
+}
+.progress-bar.done .progress-fill { width: 100%; }
+.progress-bar.active .progress-fill { width: 45%; } /* simulated progress */
+
+/* Feed Card */
+.feed-card {
+  flex: 1;
+  background: var(--card-bg);
+  margin: 0 1.5rem 2rem;
+  border-radius: 24px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  border: 1px solid #27272a;
+}
+
+/* Type badge */
+.insight-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: max-content;
+  margin-bottom: 2rem;
+}
+
+/* Content */
+.insight-headline {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 1rem;
+}
+
+.insight-desc {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.data-highlight {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--danger);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.data-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Actions */
+.actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-primary { background: var(--text); color: var(--bg); }
+.btn-secondary { background: #27272a; color: var(--text); }
+
+/* Swipe hints */
+.swipe-hint {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.swipe-left { left: -20px; }
+.swipe-right { right: -20px; }
+
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <header class="header">
+    <div class="logo">DataLens</div>
+    <div class="file-badge">Ozon_Report.csv</div>
+  </header>
+
+  <div class="progress-container">
+    <div class="progress-bar done"><div class="progress-fill"></div></div>
+    <div class="progress-bar active"><div class="progress-fill"></div></div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
+
+  <div class="feed-card">
+    <div class="swipe-hint swipe-left">←</div>
+    <div class="swipe-hint swipe-right">→</div>
+
+    <div class="insight-type">
+      <span style="display:inline-block; width:8px; height:8px; background:var(--danger); border-radius:50%;"></span>
+      Критическая потеря
+    </div>
+
+    <h1 class="insight-headline">Артикул OZ-4421 сжигает вашу прибыль.</h1>
+    
+    <p class="insight-desc">
+      Стоимость логистики и возвратов превышает выручку. Вы доплачиваете маркетплейсу за каждую продажу этого товара.
+    </p>
+
+    <div style="margin: 2rem 0;">
+      <div class="data-highlight">-145,000 ₽</div>
+      <div class="data-label">Чистый убыток за месяц</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary">Посмотреть детали расчета</button>
+      <button class="btn btn-secondary">Игнорировать</button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div style="padding: 1rem 1.5rem 2rem; display: flex; justify-content: space-around; border-top: 1px solid #27272a;">
+    <div style="color: var(--text); font-weight: 600; cursor:pointer;">Инсайты</div>
+    <div style="color: var(--text-muted); cursor:pointer;">Все данные</div>
+    <div style="color: var(--text-muted); cursor:pointer;">Чат</div>
+  </div>
+
+</div>
+
+</body>
+</html>
